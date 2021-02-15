@@ -10,16 +10,16 @@ namespace bsw {
 
 class WindowResizeEvent : public Event {
 public:
-  WindowResizeEvent(unsigned int width, unsigned int height)
+  WindowResizeEvent(uint32_t width, uint32_t height)
       : width_(width), height_(height) {}
 
-  unsigned int GetWidth() const { return width_; }
-  unsigned int GetHeight() const { return height_; }
+  uint32_t GetWidth() const { return width_; }
+  uint32_t GetHeight() const { return height_; }
 
   EVENT_TYPE(WINDOW_RESIZED)
   EVENT_CATEGORY(EventCategory::INTERNAL)
 private:
-  unsigned int width_, height_;
+  uint32_t width_, height_;
 };
 
 class WindowCloseEvent : public Event {

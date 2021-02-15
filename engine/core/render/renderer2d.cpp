@@ -8,6 +8,8 @@
 #include <core/render/shader.h>
 #include <glm/gtc/matrix_transform.hpp>
 
+#include <utils/file.h>
+
 namespace bsw {
 struct QuadVertex {
   glm::vec3 position;
@@ -44,8 +46,8 @@ static Renderer2DData sData;
 
 void Renderer2D::Init() {
   sData.quad_vertex_array = CreateRef<VertexArray>();
-  sData.quad_vertex_buffer =
-      CreateRef<VertexBuffer>(bsw::Renderer2DData::max_vertices * sizeof(QuadVertex));
+  sData.quad_vertex_buffer = CreateRef<VertexBuffer>(
+      bsw::Renderer2DData::max_vertices * sizeof(QuadVertex));
   sData.quad_vertex_buffer->SetLayout(
       {{ShaderDataType::FLOAT_3, "a_Position"},
        {ShaderDataType::FLOAT_4, "a_Color"},
@@ -54,7 +56,8 @@ void Renderer2D::Init() {
        {ShaderDataType::FLOAT, "a_TilingFactor"}});
 
   sData.quad_vertex_array->AddVertexBuffer(sData.quad_vertex_buffer);
-  sData.quad_vertex_buffer_base = new QuadVertex[bsw::Renderer2DData::max_vertices];
+  sData.quad_vertex_buffer_base =
+      new QuadVertex[bsw::Renderer2DData::max_vertices];
 
   auto *quad_indices = new uint32_t[bsw::Renderer2DData::max_indices];
   uint32_t offset = 0;
@@ -199,13 +202,17 @@ void Renderer2D::Init() {
 
   sData.texture_shader->Bind();
 
-  sData.texture_shader->SetIntArray("u_Textures", samplers, bsw::Renderer2DData::max_texture_slots);
+  sData.texture_shader->SetIntArray("u_Textures", samplers,
+                                    bsw::Renderer2DData::max_texture_slots);
   sData.texture_slots[0] = sData.white_texture;
 
   sData.quad_vertex_positions[0] = {-0.5f, -0.5f, 0.0f, 1.0f};
   sData.quad_vertex_positions[1] = {0.5f, -0.5f, 0.0f, 1.0f};
   sData.quad_vertex_positions[2] = {0.5f, 0.5f, 0.0f, 1.0f};
   sData.quad_vertex_positions[3] = {-0.5f, 0.5f, 0.0f, 1.0f};
+
+  Font::Default = CreateSingle<Font>(
+      R"(F:\BSW\internal resources\fonts\OpenSans-Regular.ttf)");
 }
 
 void Renderer2D::Shutdown() { delete[] sData.quad_vertex_buffer_base; }
@@ -225,6 +232,7 @@ void Renderer2D::StartBatch() {
 
   sData.texture_slot_index = 1;
 }
+
 void Renderer2D::NextBatch() {
   Flush();
   StartBatch();
@@ -241,7 +249,7 @@ void Renderer2D::Flush() {
   for (uint32_t i = 0; i < sData.texture_slot_index; i++)
     sData.texture_slots[i]->Bind(i);
 
-  GLRenderer::DrawIndexed(sData.quad_vertex_array, sData.quad_index_count);
+  GlRenderer::DrawIndexed(sData.quad_vertex_array, sData.quad_index_count);
   sData.stats.draw_calls++;
 }
 
@@ -379,4 +387,27 @@ void Renderer2D::DrawRotatedQuad(const glm::vec3 &position,
 void Renderer2D::ResetStats() { memset(&sData.stats, 0, sizeof(Statistics)); }
 
 Renderer2D::Statistics Renderer2D::GetStats() { return sData.stats; }
+void Renderer2D::DrawString(const std::string &text, const glm::vec2 &position,
+                            const Font &font) {
+
+  float x = position.x;
+  float y = position.y;
+
+  float scale = 1.0f;
+
+  std::string::const_iterator c;
+  for (c = text.begin(); c != text.end(); c++) {
+    auto cur_char = font.GetFontData(*c);
+
+    float xpos = x + cur_char.bearing.x * scale;
+    float ypos = y + cur_char.bearing.y * scale;
+
+    float w = cur_char.size.x * scale;
+    float h = cur_char.size.y * scale;
+
+    DrawQuad({xpos, ypos}, {w, -h}, cur_char.texture);
+
+    x += (float)(cur_char.advance >> 6) * 1.0f;
+  }
+}
 }; // namespace bsw

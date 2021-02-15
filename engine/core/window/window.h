@@ -9,6 +9,7 @@
 
 #include <core/imgui/imgui_handler.h>
 
+#include <cstdint>
 #include <functional>
 #include <utility>
 
@@ -35,8 +36,8 @@ public:
   void Enable() const;
   void Shutdown() const;
 
-  unsigned int GetWidth() const;
-  unsigned int GetHeight() const;
+  uint32_t GetWidth() const;
+  uint32_t GetHeight() const;
 
   Single<ImGuiHandler> &GuiHandler() { return im_gui_handler_; }
 

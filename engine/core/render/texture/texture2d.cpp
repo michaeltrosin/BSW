@@ -45,10 +45,11 @@ Texture2D::Texture2D(const std::string &path) {
   stbi_image_free(data);
 }
 
-Texture2D::Texture2D(uint32_t width, uint32_t height)
+Texture2D::Texture2D(uint32_t width, uint32_t height, GLint tex_param,
+                     uint32_t internalformat, uint32_t dataformat)
     : width_(width), height_(height) {
-  internal_format_ = GL_RGBA8;
-  data_format_ = GL_RGBA;
+  internal_format_ = internalformat;
+  data_format_ = dataformat;
 
   glCreateTextures(GL_TEXTURE_2D, 1, &texture_id_);
   glTextureStorage2D(texture_id_, 1, internal_format_, width_, height_);
@@ -56,19 +57,20 @@ Texture2D::Texture2D(uint32_t width, uint32_t height)
   glTextureParameteri(texture_id_, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
   glTextureParameteri(texture_id_, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
-  glTextureParameteri(texture_id_, GL_TEXTURE_WRAP_S, GL_REPEAT);
-  glTextureParameteri(texture_id_, GL_TEXTURE_WRAP_T, GL_REPEAT);
+  glTextureParameteri(texture_id_, GL_TEXTURE_WRAP_S, tex_param);
+  glTextureParameteri(texture_id_, GL_TEXTURE_WRAP_T, tex_param);
 }
-Texture2D::~Texture2D() { glDeleteTextures(1, &texture_id_); }
-void Texture2D::SetData(void *data, uint32_t size) const {
 
-  uint32_t bpp = data_format_ == GL_RGBA ? 4 : 3;
+Texture2D::~Texture2D() { glDeleteTextures(1, &texture_id_); }
+
+void Texture2D::SetData(void *data, uint32_t size) const {
+  uint32_t bpp = data_format_ == GL_RED ? 8 : (data_format_ == GL_RGBA ? 4 : 3);
   ASSERT(size == width_ * height_ * bpp, "Data must be entire texture!");
   glTextureSubImage2D(texture_id_, 0, 0, 0, width_, height_, data_format_,
                       GL_UNSIGNED_BYTE, data);
 }
-
 void Texture2D::Bind(uint32_t slot = 0) const {
   glBindTextureUnit(slot, texture_id_);
 }
+void Texture2D::Unbind(uint32_t slot = 0) const { glBindTextureUnit(slot, 0); }
 } // namespace bsw

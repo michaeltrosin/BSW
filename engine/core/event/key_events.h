@@ -30,7 +30,7 @@ public:
   EVENT_CATEGORY(EventCategory::KEYBOARD | EventCategory::INPUT)
 
 protected:
-  explicit KeyEvent(const KeyCode keycode, const unsigned int mods)
+  explicit KeyEvent(const KeyCode keycode, const uint32_t mods)
       : key_code_(keycode), mods_((Modifier)mods) {}
 
   KeyCode key_code_;
@@ -41,8 +41,8 @@ BITFIELD(KeyEvent::Modifier)
 
 class KeyPressedEvent : public KeyEvent {
 public:
-  explicit KeyPressedEvent(const KeyCode keycode, const unsigned int mods,
-                           const unsigned int repeat_count = 0)
+  explicit KeyPressedEvent(const KeyCode keycode, const uint32_t mods,
+                           const uint32_t repeat_count = 0)
       : KeyEvent(keycode, mods), repeat_count_(repeat_count) {}
 
   unsigned int GetRepeatCount() const { return repeat_count_; }
@@ -54,7 +54,7 @@ private:
 
 class KeyReleasedEvent : public KeyEvent {
 public:
-  explicit KeyReleasedEvent(const KeyCode keycode, const unsigned int mods)
+  explicit KeyReleasedEvent(const KeyCode keycode, const uint32_t mods)
       : KeyEvent(keycode, mods) {}
 
   EVENT_TYPE(KEY_RELEASED)

@@ -6,6 +6,8 @@
 
 #include <core/render/texture/texture2d.h>
 
+#include <core/render/font/font.h>
+
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
 
@@ -13,8 +15,8 @@ namespace bsw {
 // Batch rendering
 class Renderer2D {
 public:
-  Renderer2D();
-  ~Renderer2D();
+  Renderer2D() = default;
+  ~Renderer2D() = default;
 
   static void Init();
   static void Shutdown();
@@ -56,6 +58,8 @@ public:
                               float tiling_factor = 1.0f,
                               const glm::vec4 &tint_color = glm::vec4(1.0f));
 
+  static void DrawString(const std::string& text, const glm::vec2&position, const Font& font);
+
   struct Statistics {
     uint32_t draw_calls = 0;
     uint32_t quad_count = 0;
@@ -63,10 +67,12 @@ public:
     uint32_t GetTotalVertexCount() const { return quad_count * 4; }
     uint32_t GetTotalIndexCount() const { return quad_count * 6; }
   };
+
   static void ResetStats();
   static Statistics GetStats();
 
 private:
+
   static void StartBatch();
   static void NextBatch();
 };

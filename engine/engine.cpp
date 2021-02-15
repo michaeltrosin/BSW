@@ -7,6 +7,7 @@
 #include <core/window/window.h>
 
 #include <core/render/renderer2d.h>
+#include <utils/file.h>
 
 #include "engine.h"
 
@@ -40,7 +41,7 @@ void Engine::Initialize() {
   main_window_->Initialize();
   main_window_->SetEventCallback(MAKE_EVENT_CALLBACK(OnEvent));
 
-  GLRenderer::Init();
+  GlRenderer::Init();
   Renderer2D::Init();
 }
 
@@ -49,7 +50,7 @@ void Engine::OnEvent(Event &event) {
 
   if (event.Is<WindowResizeEvent>()) {
     auto e = dynamic_cast<WindowResizeEvent *>(&event);
-    GLRenderer::SetViewport(0, 0, e->GetWidth(), e->GetHeight());
+    GlRenderer::SetViewport(0, 0, e->GetWidth(), e->GetHeight());
   }
 }
 
@@ -65,8 +66,8 @@ int Engine::Run() {
   int current_updates = 0;
 
   while (!main_window_->ShouldClose()) {
-    GLRenderer::SetClearColor({0.1f, 0.1f, 0.1f, 1.0f});
-    GLRenderer::Clear();
+    GlRenderer::SetClearColor({0.1f, 0.1f, 0.1f, 1.0f});
+    GlRenderer::Clear();
 
     now_time = glfwGetTime();
     delta_time += (now_time - last_time) / (1.0 / fps_limit_);
@@ -101,10 +102,12 @@ int Engine::Run() {
       updates = 0, frames = 0;
     }
   }
+
+  File::CleanupTempFiles();
   return 0;
 }
 void Engine::ChangeTitle(const std::string &title) {
   main_window_->SetTitle(title);
 }
-float Engine::GetTime() const { return glfwGetTime(); }
+float Engine::GetTime() const { return (float) glfwGetTime(); }
 } // namespace bsw
