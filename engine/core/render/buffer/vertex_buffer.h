@@ -4,25 +4,27 @@
 
 #pragma once
 
-#include <cstdint>
 #include <core/render/buffer/buffer_layout.h>
+
+#include <cstdint>
 
 namespace bsw {
 class VertexBuffer {
 public:
-  explicit VertexBuffer(uint32_t size);
-  VertexBuffer(float* vertices, uint32_t size);
-  ~VertexBuffer();
+    explicit VertexBuffer(uint32_t size);
+    VertexBuffer(float *vertices, uint32_t size);
+    ~VertexBuffer();
 
-  void Bind() const;
-  void Unbind() const;
+    void bind() const;
+    void unbind() const;
 
-  void SetData(const void* data, uint32_t size) const;
+    void set_data(const void *data, uint32_t size) const;
 
-  const BufferLayout& GetLayout() const { return layout_; }
-  void SetLayout(const BufferLayout& layout) { layout_ = layout; }
+    const BufferLayout &get_layout() const { return m_layout; }
+    void set_layout(const BufferLayout &layout) { m_layout = layout; }
+
 private:
-  uint32_t buffer_id_;
-  BufferLayout layout_;
+    uint32_t m_buffer_id;
+    BufferLayout m_layout;
 };
-} // namespace bsw
+}// namespace bsw

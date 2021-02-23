@@ -6,95 +6,81 @@
 
 #include <glad/glad.h>
 
-namespace bsw {
-static GLenum ShaderDataTypeToOpenGlBaseType(ShaderDataType type) {
-  switch (type) {
-  case ShaderDataType::FLOAT:
-  case ShaderDataType::FLOAT_2:
-  case ShaderDataType::FLOAT_3:
-  case ShaderDataType::FLOAT_4:
-  case ShaderDataType::MAT_3:
-  case ShaderDataType::MAT_4:
-    return GL_FLOAT;
-  case ShaderDataType::INT:
-  case ShaderDataType::INT_2:
-  case ShaderDataType::INT_3:
-  case ShaderDataType::INT_4:
-    return GL_INT;
-  case ShaderDataType::BOOL:
-    return GL_BOOL;
-  default:
-    break;
-  }
+static GLenum ShaderDataTypeToOpenGlBaseType(bsw::ShaderDataType type) {
+    switch (type) {
+        case bsw::ShaderDataType::FLOAT:
+        case bsw::ShaderDataType::FLOAT_2:
+        case bsw::ShaderDataType::FLOAT_3:
+        case bsw::ShaderDataType::FLOAT_4:
+        case bsw::ShaderDataType::MAT_3:
+        case bsw::ShaderDataType::MAT_4: return GL_FLOAT;
+        case bsw::ShaderDataType::INT:
+        case bsw::ShaderDataType::INT_2:
+        case bsw::ShaderDataType::INT_3:
+        case bsw::ShaderDataType::INT_4: return GL_INT;
+        case bsw::ShaderDataType::BOOL: return GL_BOOL;
+        default: break;
+    }
 
-  ASSERT(false, "Unknown ShaderDataType!");
-  return 0;
+    ASSERT(false, "Unknown ShaderDataType!");
+    return 0;
 }
 
-VertexArray::VertexArray() : render_id_{0}, vertex_buffer_index_{0} {
-  glCreateVertexArrays(1, &render_id_);
-}
-VertexArray::~VertexArray() { glDeleteVertexArrays(1, &render_id_); }
-void VertexArray::Bind() const { glBindVertexArray(render_id_); }
-void VertexArray::Unbind() const { glBindVertexArray(0); }
-void VertexArray::AddVertexBuffer(const Ref<VertexBuffer> &vertex_buffer) {
-  Bind();
-  vertex_buffer->Bind();
+bsw::VertexArray::VertexArray() : m_render_id{0}, m_vertex_buffer_index{0} { glCreateVertexArrays(1, &m_render_id); }
+bsw::VertexArray::~VertexArray() { glDeleteVertexArrays(1, &m_render_id); }
+void bsw::VertexArray::bind() const { glBindVertexArray(m_render_id); }
+void bsw::VertexArray::unbind() const { glBindVertexArray(0); }
+void bsw::VertexArray::add_vertex_buffer(const Ref<VertexBuffer> &vertex_buffer) {
+    bind();
+    vertex_buffer->bind();
 
-  const auto &layout = vertex_buffer->GetLayout();
-  for (const auto &element : layout) {
-    switch (element.type) {
-    case ShaderDataType::FLOAT:
-    case ShaderDataType::FLOAT_2:
-    case ShaderDataType::FLOAT_3:
-    case ShaderDataType::FLOAT_4: {
-      glEnableVertexAttribArray(vertex_buffer_index_);
-      glVertexAttribPointer(vertex_buffer_index_, element.GetComponentCount(),
-                            ShaderDataTypeToOpenGlBaseType(element.type),
-                            element.normalized ? GL_TRUE : GL_FALSE,
-                            layout.GetStride(), (const void *)element.offset);
-      vertex_buffer_index_++;
-      break;
+    const auto &layout = vertex_buffer->get_layout();
+    for (const auto &element : layout) {
+        switch (element.type) {
+            case ShaderDataType::FLOAT:
+            case ShaderDataType::FLOAT_2:
+            case ShaderDataType::FLOAT_3:
+            case ShaderDataType::FLOAT_4: {
+                glEnableVertexAttribArray(m_vertex_buffer_index);
+                glVertexAttribPointer(m_vertex_buffer_index, element.get_component_count(), ShaderDataTypeToOpenGlBaseType(element.type),
+                                      element.normalized ? GL_TRUE : GL_FALSE, layout.get_stride(), (const void *) element.offset);
+                m_vertex_buffer_index++;
+                break;
+            }
+            case ShaderDataType::INT:
+            case ShaderDataType::INT_2:
+            case ShaderDataType::INT_3:
+            case ShaderDataType::INT_4:
+            case ShaderDataType::BOOL: {
+                glEnableVertexAttribArray(m_vertex_buffer_index);
+                glVertexAttribIPointer(m_vertex_buffer_index, element.get_component_count(), ShaderDataTypeToOpenGlBaseType(element.type),
+                                       layout.get_stride(), (const void *) element.offset);
+                m_vertex_buffer_index++;
+                break;
+            }
+            case ShaderDataType::MAT_3:
+            case ShaderDataType::MAT_4: {
+                uint8_t count = element.get_component_count();
+                for (uint8_t i = 0; i < count; i++) {
+                    glEnableVertexAttribArray(m_vertex_buffer_index);
+                    glVertexAttribPointer(m_vertex_buffer_index, count, ShaderDataTypeToOpenGlBaseType(element.type),
+                                          element.normalized ? GL_TRUE : GL_FALSE, layout.get_stride(),
+                                          (const void *) (element.offset + sizeof(float) * count * i));
+                    glVertexAttribDivisor(m_vertex_buffer_index, 1);
+                    m_vertex_buffer_index++;
+                }
+                break;
+            }
+            default: ASSERT(false, "Unknown ShaderDataType!");
+        }
     }
-    case ShaderDataType::INT:
-    case ShaderDataType::INT_2:
-    case ShaderDataType::INT_3:
-    case ShaderDataType::INT_4:
-    case ShaderDataType::BOOL: {
-      glEnableVertexAttribArray(vertex_buffer_index_);
-      glVertexAttribIPointer(vertex_buffer_index_, element.GetComponentCount(),
-                             ShaderDataTypeToOpenGlBaseType(element.type),
-                             layout.GetStride(), (const void *)element.offset);
-      vertex_buffer_index_++;
-      break;
-    }
-    case ShaderDataType::MAT_3:
-    case ShaderDataType::MAT_4: {
-      uint8_t count = element.GetComponentCount();
-      for (uint8_t i = 0; i < count; i++) {
-        glEnableVertexAttribArray(vertex_buffer_index_);
-        glVertexAttribPointer(
-            vertex_buffer_index_, count,
-            ShaderDataTypeToOpenGlBaseType(element.type),
-            element.normalized ? GL_TRUE : GL_FALSE, layout.GetStride(),
-            (const void *)(element.offset + sizeof(float) * count * i));
-        glVertexAttribDivisor(vertex_buffer_index_, 1);
-        vertex_buffer_index_++;
-      }
-      break;
-    }
-    default:
-      ASSERT(false, "Unknown ShaderDataType!");
-    }
-  }
 
-  vertex_buffers_.push_back(vertex_buffer);
+    m_vertex_buffers.push_back(vertex_buffer);
 }
 
-void VertexArray::SetIndexBuffer(const Ref<IndexBuffer> &index_buffer) {
-  glBindVertexArray(render_id_);
-  index_buffer->Bind();
+void bsw::VertexArray::set_index_buffer(const Ref<IndexBuffer> &index_buffer) {
+    glBindVertexArray(m_render_id);
+    index_buffer->bind();
 
-  index_buffer_ = index_buffer;
+    m_index_buffer = index_buffer;
 }
-}; // namespace bsw

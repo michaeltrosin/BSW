@@ -4,24 +4,26 @@
 
 #pragma once
 
-#include <imgui/imgui.h>
-
 #include <core/event/event.h>
 #include <core/event/event_handler.h>
-#include <core/event/screen_events.h>
+#include <imgui/imgui.h>
 
 namespace bsw {
+class Engine;
+
 class Screen {
 public:
-  EventHandler<ScreenChangeEvent> ScreenChangeRequested;
+    virtual void on_show() {}
+    virtual void on_render() {}
+    virtual void on_update(float delta_time) {}
+    virtual void on_im_gui_render() {}
+    virtual void on_close() {}
 
-  virtual void OnShow() {}
-  virtual void OnRender() {}
-  virtual void OnUpdate(float delta_time) {}
-  virtual void OnImGuiRender() {}
-  virtual void OnClose() {}
+    virtual void on_event(Event &event) {}
 
-  virtual void OnEvent(Event &event) {}
+protected:
+    uint32_t window_width();
+    uint32_t window_height();
 };
 
-} // namespace bsw
+}// namespace bsw

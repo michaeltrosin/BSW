@@ -7,7 +7,6 @@
 #include <core/event/event.h>
 #include <core/event/event_handler.h>
 #include <core/event/events.h>
-
 #include <core/imgui/imgui_handler.h>
 #include <core/screen/screen_handler.h>
 #include <core/window/window.h>
@@ -15,27 +14,32 @@
 namespace bsw {
 class Engine {
 public:
-  Engine() = default;
-  virtual ~Engine();
+    Engine() = default;
+    virtual ~Engine();
 
-  static Engine &Create(const WindowProps &props);
-  int Run();
+    static Engine &get() { return *m_instance; }
+    static Engine &create(const WindowProps &props);
+    int run();
 
-  static Engine &Get() { return *k_instance_; }
-  void ChangeTitle(const std::string& title);
+    uint32_t get_window_width();
+    uint32_t get_window_height();
 
-  float GetTime() const;
+    float get_runtime() const;
 
-  Single<ScreenHandler> &GetScreenHandler() { return screen_handler_; }
+    Single<ScreenHandler> &get_screen_handler() { return m_screen_handler; }
+
+    const Single<bsw::Window> &get_window_handle() const;
+
 private:
-  static Single<Engine> k_instance_;
+    static Single<Engine> m_instance;
 
-  void OnEvent(Event &event);
-  void Initialize();
+    void on_event(Event &event);
+    void initialize();
+
 private:
-  float fps_limit_ = 60.0f;
+    float m_fps_limit = 60.0f;
 
-  Single<ScreenHandler> screen_handler_;
-  Single<Window> main_window_;
+    Single<ScreenHandler> m_screen_handler;
+    Single<Window> m_main_window;
 };
-} // namespace bsw
+}// namespace bsw

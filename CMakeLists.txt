@@ -9,41 +9,45 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17")
 add_compile_definitions(DEBUG)
 
 set(ENGINE BSWCore)
+set(UILIB BSWUI)
 set(SANDBOX Sandbox)
 # set(AUDIO AudioEngine)
 
 add_executable(${SANDBOX}
         sandbox/main.cpp
-        sandbox/screens/mainmenu_screen.cpp
-        sandbox/screens/mainmenu_screen.h
-        sandbox/screens/settings_screen.cpp
-        sandbox/screens/settings_screen.h
+        sandbox/screens/test2d.cpp
+        sandbox/screens/test2d.h
         )
 
-target_link_libraries(${SANDBOX} ${ENGINE})
+target_link_libraries(${SANDBOX} ${ENGINE}
+        ${UILIB}
+        )
 
 # add_library(${AUDIO})
+add_library(${UILIB} uilib/ui_button.cpp uilib/ui_button.h)
+target_link_libraries(${UILIB} ${ENGINE})
+
 # Builds Engine as a library
 add_library(${ENGINE}
         ${DEP_FOLDER}/glad/src/glad.c
 
-        include/vendor/stb_image/stb_image.h
-        include/vendor/stb_image/stb_image.cpp
-        include/vendor/imgui/imconfig.h
-        include/vendor/imgui/imgui.cpp
-        include/vendor/imgui/imgui.h
-        include/vendor/imgui/imgui_demo.cpp
-        include/vendor/imgui/imgui_draw.cpp
-        include/vendor/imgui/imgui_impl_glfw.cpp
-        include/vendor/imgui/imgui_impl_glfw.h
-        include/vendor/imgui/imgui_impl_opengl3.cpp
-        include/vendor/imgui/imgui_impl_opengl3.h
-        include/vendor/imgui/imgui_internal.h
-        include/vendor/imgui/imgui_tables.cpp
-        include/vendor/imgui/imgui_widgets.cpp
-        include/vendor/imgui/imstb_rectpack.h
-        include/vendor/imgui/imstb_textedit.h
-        include/vendor/imgui/imstb_truetype.h
+        ${DEP_FOLDER}/include/vendor/stb_image/stb_image.h
+        ${DEP_FOLDER}/include/vendor/stb_image/stb_image.cpp
+        ${DEP_FOLDER}/include/vendor/imgui/imconfig.h
+        ${DEP_FOLDER}/include/vendor/imgui/imgui.cpp
+        ${DEP_FOLDER}/include/vendor/imgui/imgui.h
+        ${DEP_FOLDER}/include/vendor/imgui/imgui_demo.cpp
+        ${DEP_FOLDER}/include/vendor/imgui/imgui_draw.cpp
+        ${DEP_FOLDER}/include/vendor/imgui/imgui_impl_glfw.cpp
+        ${DEP_FOLDER}/include/vendor/imgui/imgui_impl_glfw.h
+        ${DEP_FOLDER}/include/vendor/imgui/imgui_impl_opengl3.cpp
+        ${DEP_FOLDER}/include/vendor/imgui/imgui_impl_opengl3.h
+        ${DEP_FOLDER}/include/vendor/imgui/imgui_internal.h
+        ${DEP_FOLDER}/include/vendor/imgui/imgui_tables.cpp
+        ${DEP_FOLDER}/include/vendor/imgui/imgui_widgets.cpp
+        ${DEP_FOLDER}/include/vendor/imgui/imstb_rectpack.h
+        ${DEP_FOLDER}/include/vendor/imgui/imstb_textedit.h
+        ${DEP_FOLDER}/include/vendor/imgui/imstb_truetype.h
 
         engine/engine.cpp
         engine/engine.h
@@ -55,23 +59,23 @@ add_library(${ENGINE}
         engine/utils/file.cpp
         engine/utils/timing.h
         engine/utils/macros.h
-        engine/utils/mathf.h
-        engine/utils/math/easing.h
+        engine/math/mathf.h
         engine/utils/assertion.h
 
+        engine/core/window/window.h
         engine/core/window/window.cpp
         engine/core/imgui/imgui_handler.h
         engine/core/imgui/imgui_handler.cpp
-        engine/core/screen/screen_handler.cpp
         engine/core/screen/screen_handler.h
+        engine/core/screen/screen_handler.cpp
         engine/core/screen/screen.h
+        engine/core/screen/screen.cpp
         engine/core/input/key_codes.h
         engine/core/input/mouse_codes.h
-        engine/core/window/window.h
-        engine/core/screen/screen_stack.cpp
         engine/core/screen/screen_stack.h
-        engine/core/render/renderer2d.cpp
-        engine/core/render/renderer2d.h
+        engine/core/screen/screen_stack.cpp
+        engine/core/render/2d/renderer2d.cpp
+        engine/core/render/2d/renderer2d.h
         engine/core/event/event.h
         engine/core/event/mouse_events.h
         engine/core/event/key_events.h
@@ -92,12 +96,20 @@ add_library(${ENGINE}
         engine/core/render/texture/texture2d.h
         engine/core/render/gl_render.cpp
         engine/core/render/gl_render.h
-        engine/core/event/screen_events.h
-        engine/core/render/font/font.cpp
-        engine/core/render/font/font.h)
+        engine/core/font/font.cpp
+        engine/core/font/font.h
+        engine/core/font/font_manager.cpp
+        engine/core/font/font_manager.h
+        engine/math/color.cpp
+        engine/math/color.h
+        engine/core/render/camera.h
+        engine/core/input/input.h
+        engine/core/input/input.cpp
+        engine/math/mathf.cpp)
 
 include_directories(engine)
-include_directories(include/vendor)
+include_directories(uilib)
+include_directories(${DEP_FOLDER}/include/vendor)
 
 include_directories(${DEP_FOLDER}/glad/include)
 set_target_properties(${ENGINE} PROPERTIES LINKER_LANGUAGE CXX)

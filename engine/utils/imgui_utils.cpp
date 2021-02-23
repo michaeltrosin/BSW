@@ -3,5 +3,3 @@
 //
 
 #include "imgui_utils.h"
-
-namespace bsw {}

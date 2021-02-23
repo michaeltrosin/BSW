@@ -9,5 +9,5 @@
 #define MINUTE (60 * SECOND)
 #define HOUR (60 * MINUTE)
 
-#define SECOND_TO_MILLI(sec) ((sec) * 1000)
+#define SECOND_TO_MILLI(sec) ((sec) *1000)
 #define MILLI_TO_SECOND(milli) ((milli) / 1000)

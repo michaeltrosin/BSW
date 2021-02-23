@@ -12,39 +12,37 @@
 namespace bsw {
 class Shader {
 public:
-  static Shader BasicTexture;
+    static Shader basic_texture;
 
-  //  explicit Shader(const std::string &filename);
-  Shader(std::string name, const std::string &vertex_src,
-         const std::string &fragment_src);
-  ~Shader();
+    //  explicit Shader(const std::string &filename);
+    Shader(std::string name, const std::string &vertex_src, const std::string &fragment_src);
+    ~Shader();
 
-  void Bind() const;
-  void Unbind() const;
+    void bind() const;
+    void unbind() const;
 
-  const std::string &GetName() const { return name_; }
+    const std::string &get_name() const { return m_name; }
 
-  void SetInt(const std::string &name, int value);
-  void SetIntArray(const std::string &name, int* values, uint32_t count);
+    void set_int(const std::string &name, int value);
+    void set_int_array(const std::string &name, int *values, uint32_t count);
 
-  void SetFloat(const std::string &name, float value);
-  void SetFloat2(const std::string &name, const glm::vec2 &value);
-  void SetFloat3(const std::string &name, const glm::vec3 &value);
-  void SetFloat4(const std::string &name, const glm::vec4 &value);
+    void set_float(const std::string &name, float value);
+    void set_float_2(const std::string &name, const glm::vec2 &value);
+    void set_float_3(const std::string &name, const glm::vec3 &value);
+    void set_float_4(const std::string &name, const glm::vec4 &value);
 
-  void SetMat3(const std::string &name, const glm::mat3 &matrix);
-  void SetMat4(const std::string &name, const glm::mat4 &matrix);
+    void set_mat_3(const std::string &name, const glm::mat3 &matrix);
+    void set_mat_4(const std::string &name, const glm::mat4 &matrix);
 
 private:
-  void Compile(const std::string &vertex_src, const std::string &fragment_src);
-  uint32_t CompileShaderSource(const std::string &src, uint32_t type,
-                               bool &compile_status) const;
+    void compile(const std::string &vertex_src, const std::string &fragment_src);
+    uint32_t compile_shader_source(const std::string &src, uint32_t type, bool &compile_status) const;
 
-  int GetUniformLocation(const std::string &name);
+    int get_uniform_location(const std::string &name);
 
-  std::unordered_map<std::string, uint32_t> uniform_location_cache_;
+    std::unordered_map<std::string, uint32_t> m_uniform_location_cache;
 
-  uint32_t program_id_;
-  std::string name_;
+    uint32_t m_program_id;
+    std::string m_name;
 };
-} // namespace bsw
+}// namespace bsw

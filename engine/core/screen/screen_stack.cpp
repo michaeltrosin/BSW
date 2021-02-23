@@ -6,44 +6,32 @@
 
 #include <core/screen/screen.h>
 
-namespace bsw {
+void bsw::ScreenStack::push(const std::string &name, const Ref<Screen> &screen) { m_screens.emplace_back(name, screen); }
 
-void ScreenStack::Push(const std::string &name, const Ref<Screen> &screen) {
-  screens_.emplace_back(name, screen);
+void bsw::ScreenStack::pop(const std::string &name) {
+    int index = index_of(name);
+    if (index < 0) return;
+
+    m_screens.erase(m_screens.begin() + index_of(name));
 }
 
-void ScreenStack::Pop(const std::string &name) {
-  int index = IndexOf(name);
-  if (index < 0)
-    return;
-
-  screens_.erase(screens_.begin() + IndexOf(name));
-}
-
-Ref<Screen> ScreenStack::operator[](const std::string &name) {
-  for (auto &a : screens_) {
-    if (a.first == name) {
-      return a.second;
+Ref<bsw::Screen> bsw::ScreenStack::operator[](const std::string &name) {
+    for (auto &a : m_screens) {
+        if (a.first == name) { return a.second; }
     }
-  }
-  return nullptr;
+    return nullptr;
 }
 
-int ScreenStack::IndexOf(const std::string &name) {
-  for (int i = 0; i < screens_.size(); i++) {
-    if (screens_[i].first == name)
-      return i;
-  }
-  return -1;
+int bsw::ScreenStack::index_of(const std::string &name) {
+    for (int i = 0; i < m_screens.size(); i++) {
+        if (m_screens[i].first == name) return i;
+    }
+    return -1;
 }
 
-Ref<Screen> ScreenStack::operator[](int index) {
-  if (screens_.empty())
-    return nullptr;
-  if (index < 0)
-    return nullptr;
-  if (index > screens_.size())
-    return nullptr;
-  return screens_.at(index).second;
+Ref<bsw::Screen> bsw::ScreenStack::operator[](int index) {
+    if (m_screens.empty()) return nullptr;
+    if (index < 0) return nullptr;
+    if (index > m_screens.size()) return nullptr;
+    return m_screens.at(index).second;
 }
-} // namespace bsw

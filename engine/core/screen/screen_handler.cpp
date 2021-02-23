@@ -6,45 +6,36 @@
 
 #include <core/event/event.h>
 
-namespace bsw {
+bsw::ScreenHandler::ScreenHandler() { m_screen_stack = create_single<ScreenStack>(); }
 
-void ScreenHandler::SwitchScreen(const std::string &name) {
-  if (current_screen_)
-    current_screen_->OnClose();
-  current_screen_ = (*screen_stack_)[name];
-  ASSERT(current_screen_, "Screen is null!");
+void bsw::ScreenHandler::switch_screen(const std::string &name) {
+    if (m_current_screen) m_current_screen->on_close();
+    m_current_screen = (*m_screen_stack)[name];
+    ASSERT(m_current_screen, "Screen is null!");
 
-  current_screen_->OnShow();
+    m_current_screen->on_show();
 }
 
-void ScreenHandler::SwitchScreen(int index) {
-  if (current_screen_)
-    current_screen_->OnClose();
-  current_screen_ = (*screen_stack_)[index];
-  ASSERT(current_screen_, "Screen is null!");
+void bsw::ScreenHandler::switch_screen(int index) {
+    if (m_current_screen) m_current_screen->on_close();
+    m_current_screen = (*m_screen_stack)[index];
+    ASSERT(m_current_screen, "Screen is null!");
 
-  current_screen_->OnShow();
+    m_current_screen->on_show();
 }
 
-ScreenHandler::ScreenHandler() { screen_stack_ = CreateSingle<ScreenStack>(); }
-
-void ScreenHandler::OnRender() {
-  if (current_screen_)
-    current_screen_->OnRender();
+void bsw::ScreenHandler::on_render() {
+    if (m_current_screen) m_current_screen->on_render();
 }
 
-void ScreenHandler::OnImGuiRender() {
-  if (current_screen_)
-    current_screen_->OnImGuiRender();
+void bsw::ScreenHandler::on_im_gui_render() {
+    if (m_current_screen) m_current_screen->on_im_gui_render();
 }
 
-void ScreenHandler::OnUpdate(float delta_time) {
-  if (current_screen_)
-    current_screen_->OnUpdate(delta_time);
+void bsw::ScreenHandler::on_update(float delta_time) {
+    if (m_current_screen) m_current_screen->on_update(delta_time);
 }
 
-void ScreenHandler::OnEvent(Event &event) {
-  if (current_screen_)
-    current_screen_->OnEvent(event);
+void bsw::ScreenHandler::on_event(Event &event) {
+    if (m_current_screen) m_current_screen->on_event(event);
 }
-} // namespace bsw

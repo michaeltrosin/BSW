@@ -9,33 +9,31 @@
 
 #include "imgui_handler.h"
 
-namespace bsw {
-ImGuiHandler::ImGuiHandler(GLFWwindow *window) : window_(window) {}
+bsw::ImGuiHandler::ImGuiHandler(GLFWwindow *window) : m_window(window) {}
 
-void ImGuiHandler::InitializeImGui(char *glsl_version) {
-  ImGui::CreateContext();
-  ImGuiIO &io = ImGui::GetIO();
-  (void)io;
+void bsw::ImGuiHandler::initialize_im_gui(char *glsl_version) {
+    ImGui::CreateContext();
+    ImGuiIO &io = ImGui::GetIO();
+    (void) io;
 
-  ImGui::StyleColorsDark();
-  ImGui_ImplGlfw_InitForOpenGL(window_, true);
-  ImGui_ImplOpenGL3_Init(glsl_version);
+    ImGui::StyleColorsDark();
+    ImGui_ImplGlfw_InitForOpenGL(m_window, true);
+    ImGui_ImplOpenGL3_Init(glsl_version);
 }
 
-void ImGuiHandler::Begin() {
-  ImGui_ImplOpenGL3_NewFrame();
-  ImGui_ImplGlfw_NewFrame();
-  ImGui::NewFrame();
+void bsw::ImGuiHandler::begin() {
+    ImGui_ImplOpenGL3_NewFrame();
+    ImGui_ImplGlfw_NewFrame();
+    ImGui::NewFrame();
 }
 
-void ImGuiHandler::End() {
-  ImGui::Render();
-  ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+void bsw::ImGuiHandler::end() {
+    ImGui::Render();
+    ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 }
 
-void ImGuiHandler::Shutdown() {
-  ImGui_ImplOpenGL3_Shutdown();
-  ImGui_ImplGlfw_Shutdown();
-  ImGui::DestroyContext();
+void bsw::ImGuiHandler::shutdown() {
+    ImGui_ImplOpenGL3_Shutdown();
+    ImGui_ImplGlfw_Shutdown();
+    ImGui::DestroyContext();
 }
-} // namespace bsw

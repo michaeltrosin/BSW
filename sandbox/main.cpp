@@ -1,26 +1,25 @@
 //
 // Created by Michael on 10.02.2021.
 //
-#include <engine.h>
-#include <utils/assertion.h>
-#include <utils/file.h>
-
+#include <core/font/font_manager.h>
 #include <core/screen/screen.h>
 #include <core/screen/screen_handler.h>
+#include <engine.h>
 
-#include "screens/mainmenu_screen.h"
-#include "screens/settings_screen.h"
+#include <utils/file.h>
+
+#include "screens/test2d.h"
 
 using namespace bsw;
 
 int main() {
-  auto &engine = Engine::Create(WindowProps{"bsw"});
+    auto &engine = Engine::create(WindowProps{"bsw"});
 
-  engine.GetScreenHandler()->AddScreen<MainMenu>("main");
-  engine.GetScreenHandler()->AddScreen<SettingsScreen>("settings");
-  engine.GetScreenHandler()->SwitchScreen("main");
+    engine.get_screen_handler()->add_screen<Test2D>("test2d");
+    engine.get_screen_handler()->switch_screen("test2d");
 
-  // std::filesystem::temp_directory_path()
+    FontManager::add_font("Title", R"(F:\BSW\resources\fonts\Roboto-Light.ttf)",
+                          58);
 
-  return engine.Run();
+    return engine.run();
 }

@@ -9,16 +9,16 @@
 namespace bsw {
 class IndexBuffer {
 public:
-  IndexBuffer(uint32_t *indices, uint32_t count);
-  ~IndexBuffer();
+    IndexBuffer(uint32_t *indices, uint32_t count);
+    ~IndexBuffer();
 
-  void Bind() const;
-  void Unbind() const;
+    void bind() const;
+    void unbind() const;
 
-  uint32_t GetCount() const { return count_; }
+    uint32_t get_count() const { return m_count; }
 
 private:
-  uint32_t buffer_id_;
-  uint32_t count_;
+    uint32_t m_buffer_id;
+    uint32_t m_count;
 };
-}
+}// namespace bsw

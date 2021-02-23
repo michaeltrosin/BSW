@@ -4,25 +4,25 @@
 
 #pragma once
 
+#include <bsw.h>
+
 #include <string>
 #include <vector>
-
-#include <bsw.h>
 
 namespace bsw {
 class Screen;
 
 class ScreenStack {
 public:
-  void Push(const std::string &name, const Ref<Screen> &screen);
-  void Pop(const std::string &name);
+    void push(const std::string &name, const Ref<Screen> &screen);
+    void pop(const std::string &name);
 
-  Ref<Screen> operator[](const std::string &name);
-  Ref<Screen> operator[](int index);
+    Ref<Screen> operator[](const std::string &name);
+    Ref<Screen> operator[](int index);
 
 private:
-  int IndexOf(const std::string &name);
+    int index_of(const std::string &name);
 
-  std::vector<std::pair<std::string, Ref<Screen>>> screens_;
+    std::vector<std::pair<std::string, Ref<Screen>>> m_screens;
 };
-} // namespace bsw
+}// namespace bsw

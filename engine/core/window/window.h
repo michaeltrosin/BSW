@@ -12,59 +12,68 @@
 #include <cstdint>
 #include <functional>
 #include <utility>
+#include <core/input/key_codes.h>
+#include <core/input/mouse_codes.h>
+
+#include <glm/glm.hpp>
 
 namespace bsw {
+using namespace key;
+using namespace mouse;
+
 class Event;
 
 struct WindowProps {
-  std::string title;
-  unsigned int width;
-  unsigned int height;
+    std::string title;
+    unsigned int width;
+    unsigned int height;
 
-  explicit WindowProps(std::string title, int width = 1280, int height = 720)
-      : title(std::move(title)), width(width), height(height) {}
+    explicit WindowProps(std::string title, int width = 1280, int height = 720) : title(std::move(title)), width(width), height(height) {}
 };
 
 class Window {
 public:
-  using CallbackFunction = std::function<void(Event &)>;
+    using CallbackFunction = std::function<void(Event &)>;
 
-  explicit Window(const WindowProps &window_props);
-  ~Window() = default;
+    explicit Window(const WindowProps &window_props);
+    ~Window() = default;
 
-  void Initialize();
-  void Enable() const;
-  void Shutdown() const;
+    void initialize();
+    void enable() const;
+    void shutdown() const;
 
-  uint32_t GetWidth() const;
-  uint32_t GetHeight() const;
+    uint32_t get_width() const;
+    uint32_t get_height() const;
 
-  Single<ImGuiHandler> &GuiHandler() { return im_gui_handler_; }
+    Single<ImGuiHandler> &gui_handler() { return m_im_gui_handler; }
 
-  void SwapBuffers() const;
-  bool ShouldClose() const { return glfwWindowShouldClose(window_); }
-  void *GetNativeWindow() const { return (void *)window_; }
+    void swap_buffers() const;
+    bool should_close() const { return glfwWindowShouldClose(m_window); }
+    void *get_native_window() const { return (void *) m_window; }
 
-  void SetVSync(bool enabled);
-  bool IsVSync() const;
+    void set_v_sync(bool enabled);
+    bool is_v_sync() const;
 
-  void SetEventCallback(const CallbackFunction &callback_function);
+    void set_event_callback(const CallbackFunction &callback_function);
 
-  void GetCursorPos(float &pox_x, float &pos_y);
+    bool is_mouse_button_pressed(MouseCode button);
+    bool is_key_pressed(KeyCode key);
+    glm::vec2 get_mouse_position();
 
-  void SetTitle(const std::string& title);
+    void set_title(const std::string &title);
+
 private:
-  Single<ImGuiHandler> im_gui_handler_;
-  GLFWwindow *window_;
+    Single<ImGuiHandler> m_im_gui_handler;
+    GLFWwindow *m_window;
 
-  struct WindowData {
-    std::string title;
-    unsigned int width, height;
-    bool vsync = true;
+    struct WindowData {
+        std::string title;
+        unsigned int width, height;
+        bool vsync = true;
 
-    CallbackFunction on_event;
-  };
+        CallbackFunction on_event;
+    };
 
-  WindowData window_data_;
+    WindowData m_window_data;
 };
-} // namespace bsw
+}// namespace bsw

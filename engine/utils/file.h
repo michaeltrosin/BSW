@@ -4,33 +4,34 @@
 
 #pragma once
 
+#include <cstdint>
 #include <string>
 #include <vector>
 
 class File {
 public:
-  struct FileReadResult {
-    char *data;
-    size_t length;
-    std::string filename;
+    struct FileReadResult {
+        char *data;
+        size_t length;
+        std::string filename;
 
-    ~FileReadResult() { delete[] data; }
+        ~FileReadResult() { delete[] data; }
 
-    char &operator[](int) const;
-  };
+        char &operator[](int) const;
+    };
 
-  static FileReadResult ReadAll(const std::string &filename);
-  static void WriteAll(const std::string &filename, const char *buffer);
+    static FileReadResult read_all(const std::string &filename);
+    static void write_all(const std::string &filename, const char *buffer);
 
-  static FileReadResult ReadAllBinary(const std::string &filename);
-  static void WriteAllBinary(const std::string &filename,
-                             const unsigned char *buffer, size_t count);
+    static FileReadResult read_all_binary(const std::string &filename);
+    static void write_all_binary(const std::string &filename, const uint8_t *buffer, size_t count);
 
-  static FileReadResult BinaryToString(const unsigned char* buffer, size_t count);
-  static std::string ToTempFile(const unsigned char* buffer, size_t count);
+    static FileReadResult binary_to_string(const uint8_t *buffer, size_t count);
+    static std::string create_and_write_temp_file(const uint8_t *buffer, size_t count);
+    static std::string create_temp_file();
 
-  static void CleanupTempFiles();
+    static void cleanup_temp_files();
 
 private:
-  static std::vector<std::string> temp_files_;
+    static std::vector<std::string> m_temp_files;
 };

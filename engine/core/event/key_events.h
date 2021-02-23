@@ -8,62 +8,59 @@
 #include <core/input/key_codes.h>
 
 namespace bsw {
-using namespace keycodes;
+using namespace key;
 
 class KeyEvent : public Event {
 public:
-  enum class Modifier : unsigned short {
-    NONE = 0,
-    SHIFT = BIT(0),
-    CONTROL = BIT(1),
-    ALT = BIT(2),
-    SUPER = BIT(3),
-    CAPS_LOCK = BIT(4),
-    NUM_LOCK = BIT(5),
-  };
+    enum class Modifier : unsigned short {
+        NONE = 0,
+        SHIFT = BIT(0),
+        CONTROL = BIT(1),
+        ALT = BIT(2),
+        SUPER = BIT(3),
+        CAPS_LOCK = BIT(4),
+        NUM_LOCK = BIT(5),
+    };
 
-  KeyCode GetKeyCode() const { return key_code_; }
-  Modifier GetModifiers() const { return mods_; }
+    KeyCode get_key_code() const { return m_key_code; }
+    Modifier get_modifiers() const { return m_mods; }
 
-  bool HasModifier(Modifier mod) const { return GetModifiers() == mod; }
+    bool has_modifier(Modifier mod) const { return get_modifiers() == mod; }
 
-  EVENT_CATEGORY(EventCategory::KEYBOARD | EventCategory::INPUT)
+    EVENT_CATEGORY(EventCategory::KEYBOARD | EventCategory::INPUT)
 
 protected:
-  explicit KeyEvent(const KeyCode keycode, const uint32_t mods)
-      : key_code_(keycode), mods_((Modifier)mods) {}
+    explicit KeyEvent(const KeyCode keycode, const uint32_t mods) : m_key_code(keycode), m_mods((Modifier) mods) {}
 
-  KeyCode key_code_;
-  Modifier mods_;
+    KeyCode m_key_code;
+    Modifier m_mods;
 };
 
 BITFIELD(KeyEvent::Modifier)
 
 class KeyPressedEvent : public KeyEvent {
 public:
-  explicit KeyPressedEvent(const KeyCode keycode, const uint32_t mods,
-                           const uint32_t repeat_count = 0)
-      : KeyEvent(keycode, mods), repeat_count_(repeat_count) {}
+    explicit KeyPressedEvent(const KeyCode keycode, const uint32_t mods, const uint32_t repeat_count = 0)
+        : KeyEvent(keycode, mods), m_repeat_count(repeat_count) {}
 
-  unsigned int GetRepeatCount() const { return repeat_count_; }
+    unsigned int get_repeat_count() const { return m_repeat_count; }
 
-  EVENT_TYPE(KEY_PRESSED)
+    EVENT_TYPE(KEY_PRESSED)
 private:
-  unsigned int repeat_count_;
+    unsigned int m_repeat_count;
 };
 
 class KeyReleasedEvent : public KeyEvent {
 public:
-  explicit KeyReleasedEvent(const KeyCode keycode, const uint32_t mods)
-      : KeyEvent(keycode, mods) {}
+    explicit KeyReleasedEvent(const KeyCode keycode, const uint32_t mods) : KeyEvent(keycode, mods) {}
 
-  EVENT_TYPE(KEY_RELEASED)
+    EVENT_TYPE(KEY_RELEASED)
 };
 
 class KeyTypedEvent : public KeyEvent {
 public:
-  explicit KeyTypedEvent(const KeyCode keycode) : KeyEvent(keycode, 0) {}
+    explicit KeyTypedEvent(const KeyCode keycode) : KeyEvent(keycode, 0) {}
 
-  EVENT_TYPE(KEY_TYPED)
+    EVENT_TYPE(KEY_TYPED)
 };
-} // namespace bsw
+}// namespace bsw

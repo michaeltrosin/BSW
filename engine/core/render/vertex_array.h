@@ -4,34 +4,32 @@
 
 #pragma once
 
-#include <vector>
-
 #include <bsw.h>
 #include <core/render/buffer/index_buffer.h>
 #include <core/render/buffer/vertex_buffer.h>
 
+#include <vector>
+
 namespace bsw {
 class VertexArray {
 public:
-  VertexArray();
-  ~VertexArray();
+    VertexArray();
+    ~VertexArray();
 
-  void Bind() const;
-  void Unbind() const;
+    void bind() const;
+    void unbind() const;
 
-  void AddVertexBuffer(const Ref<VertexBuffer> &vertex_buffer);
-  void SetIndexBuffer(const Ref<IndexBuffer> &index_buffer);
+    void add_vertex_buffer(const Ref<VertexBuffer> &vertex_buffer);
+    void set_index_buffer(const Ref<IndexBuffer> &index_buffer);
 
-  const std::vector<Ref<VertexBuffer>> &GetVertexBuffers() const {
-    return vertex_buffers_;
-  }
-  const Ref<bsw::IndexBuffer> &GetIndexBuffer() const { return index_buffer_; }
+    const std::vector<Ref<VertexBuffer>> &get_vertex_buffers() const { return m_vertex_buffers; }
+    const Ref<bsw::IndexBuffer> &get_index_buffer() const { return m_index_buffer; }
 
 private:
-  uint32_t render_id_;
-  uint32_t vertex_buffer_index_;
+    uint32_t m_render_id;
+    uint32_t m_vertex_buffer_index;
 
-  std::vector<Ref<VertexBuffer>> vertex_buffers_;
-  Ref<IndexBuffer> index_buffer_;
+    std::vector<Ref<VertexBuffer>> m_vertex_buffers;
+    Ref<IndexBuffer> m_index_buffer;
 };
-} // namespace bsw
+}// namespace bsw

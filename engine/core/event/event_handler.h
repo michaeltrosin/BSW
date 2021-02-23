@@ -4,35 +4,24 @@
 
 #pragma once
 
+#include <core/event/event.h>
+
 #include <functional>
 #include <vector>
 
-#include <core/event/event.h>
-
 namespace bsw {
 
-template <typename T> class EventHandler {
-  using CallbackFunction = std::function<void(T &)>;
+template<typename T>
+class EventHandler {
+    using CallbackFunction = std::function<void(T &)>;
 
 public:
-  EventHandler &operator+=(const CallbackFunction &callback_function) {
-    attached_callbacks_.push_back(callback_function);
-    return *this;
-  }
+    EventHandler &operator+=(const CallbackFunction &callback_function);
 
-  void operator()(T &event) {
-    for (auto &cb : attached_callbacks_) {
-      cb(event);
-    }
-  }
-
-//  template <typename... Args> void operator()(Args &&...args) {
-//    for (auto &cb : attached_callbacks_) {
-//      cb(std::forward<Args>(args)...);
-//    }
-//  }
+    void operator()(T &event);
 
 private:
-  std::vector<CallbackFunction> attached_callbacks_;
+    std::vector<CallbackFunction> m_attached_callbacks;
 };
-} // namespace bsw
+
+}// namespace bsw

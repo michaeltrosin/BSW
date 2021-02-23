@@ -4,22 +4,21 @@
 
 #pragma once
 
-#include <imgui/imgui_impl_glfw.h>
-
 #include <bsw.h>
+#include <imgui/imgui_impl_glfw.h>
 
 namespace bsw {
 
 class ImGuiHandler {
 public:
-  explicit ImGuiHandler(GLFWwindow *window);
+    explicit ImGuiHandler(GLFWwindow *window);
 
-  void InitializeImGui(char *glsl_version);
-  void Begin();
-  void End();
-  void Shutdown();
+    void initialize_im_gui(char *glsl_version);
+    void begin();
+    void end();
+    void shutdown();
 
 private:
-  GLFWwindow *window_;
+    GLFWwindow *m_window;
 };
-} // namespace bsw
+}// namespace bsw

@@ -6,22 +6,16 @@
 
 #include <glad/glad.h>
 
-namespace bsw {
-IndexBuffer::IndexBuffer(uint32_t *indices, uint32_t count)
-    : buffer_id_{0}, count_(count) {
-  glCreateBuffers(1, &buffer_id_);
+bsw::IndexBuffer::IndexBuffer(uint32_t *indices, uint32_t count) : m_buffer_id{0}, m_count(count) {
+    glCreateBuffers(1, &m_buffer_id);
 
-  // GL_ELEMENT_ARRAY_BUFFER is not valid without an actively bound VAO
-  // Binding with GL_ARRAY_BUFFER allows the data to be loaded regardless of VAO
-  // state.
-  glBindBuffer(GL_ARRAY_BUFFER, buffer_id_);
-  glBufferData(GL_ARRAY_BUFFER, count * sizeof(uint32_t), indices,
-               GL_STATIC_DRAW);
+    // GL_ELEMENT_ARRAY_BUFFER is not valid without an actively bound VAO
+    // Binding with GL_ARRAY_BUFFER allows the data to be loaded regardless of VAO
+    // state.
+    glBindBuffer(GL_ARRAY_BUFFER, m_buffer_id);
+    glBufferData(GL_ARRAY_BUFFER, count * sizeof(uint32_t), indices, GL_STATIC_DRAW);
 }
-IndexBuffer::~IndexBuffer() { glDeleteBuffers(1, &buffer_id_); }
+bsw::IndexBuffer::~IndexBuffer() { glDeleteBuffers(1, &m_buffer_id); }
 
-void IndexBuffer::Bind() const {
-  glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffer_id_);
-}
-void IndexBuffer::Unbind() const { glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0); }
-} // namespace bsw
+void bsw::IndexBuffer::bind() const { glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_buffer_id); }
+void bsw::IndexBuffer::unbind() const { glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0); }

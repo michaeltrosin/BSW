@@ -12,4 +12,4 @@ class ImGuiUtils {
 public:
 };
 
-} // namespace bsw
+}// namespace bsw
