@@ -18,7 +18,7 @@ public:
     virtual ~Engine();
 
     static Engine &get() { return *m_instance; }
-    static Engine &create(const WindowProps &props);
+    static Engine &create(const WindowProps &props, const char** argv);
     int run();
 
     uint32_t get_window_width();

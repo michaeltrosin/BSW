@@ -43,11 +43,11 @@ public:
     explicit KeyPressedEvent(const KeyCode keycode, const uint32_t mods, const uint32_t repeat_count = 0)
         : KeyEvent(keycode, mods), m_repeat_count(repeat_count) {}
 
-    unsigned int get_repeat_count() const { return m_repeat_count; }
+    uint32_t get_repeat_count() const { return m_repeat_count; }
 
     EVENT_TYPE(KEY_PRESSED)
 private:
-    unsigned int m_repeat_count;
+    uint32_t m_repeat_count;
 };
 
 class KeyReleasedEvent : public KeyEvent {

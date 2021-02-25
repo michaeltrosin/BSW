@@ -25,8 +25,8 @@ class Event;
 
 struct WindowProps {
     std::string title;
-    unsigned int width;
-    unsigned int height;
+    uint32_t width;
+    uint32_t height;
 
     explicit WindowProps(std::string title, int width = 1280, int height = 720) : title(std::move(title)), width(width), height(height) {}
 };
@@ -68,7 +68,7 @@ private:
 
     struct WindowData {
         std::string title;
-        unsigned int width, height;
+        uint32_t width, height;
         bool vsync = true;
 
         CallbackFunction on_event;

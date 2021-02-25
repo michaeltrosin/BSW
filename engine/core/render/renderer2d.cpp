@@ -4,9 +4,9 @@
 
 #include "renderer2d.h"
 
+#include <bsw.h>
 #include <core/render/gl_render.h>
 #include <core/render/shader.h>
-#include <utils/file.h>
 
 #include <glm/gtc/matrix_transform.hpp>
 
@@ -80,8 +80,8 @@ void bsw::Renderer2D::init() {
     int32_t samplers[Renderer2DData::max_texture_slots];
     for (uint32_t i = 0; i < Renderer2DData::max_texture_slots; i++) samplers[i] = i;
 
-    data.texture_shader = create_ref<Shader>("basic_texture", File::binary_to_string(m_vertex_bin_data, m_vertex_bin_size).data,
-                                             File::binary_to_string(m_fragment_bin_data, m_fragment_bin_size).data);
+    data.texture_shader =
+        create_ref<Shader>("basic_texture", AssetManager::read_all("shader/basic_vertex.glsl").data, AssetManager::read_all("shader/basic_fragment.glsl").data);
 
     data.texture_shader->bind();
 

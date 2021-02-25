@@ -8,6 +8,6 @@
 #define ARRAY_SIZE(arr) ((int) (sizeof(arr) / sizeof(*(arr))))
 
 #define BITFIELD(enum)                                                                                                                               \
-    inline enum operator|(enum a, enum b) { return static_cast<enum>(static_cast<unsigned int>(a) | static_cast<unsigned int>(b)); }                 \
-    inline bool operator&(enum a, enum b) { return static_cast<unsigned int>(a) & static_cast<unsigned int>(b); }                                    \
+    inline enum operator|(enum a, enum b) { return static_cast<enum>(static_cast<uint32_t>(a) | static_cast<uint32_t>(b)); }                 \
+    inline bool operator&(enum a, enum b) { return static_cast<uint32_t>(a) & static_cast<uint32_t>(b); }                                    \
     inline bool operator==(enum a, enum b) { return a & b; }

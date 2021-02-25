@@ -6,6 +6,8 @@
 
 #include <cstdio>
 
+#include <iostream>
+
 #define OPEN_FILE(name, data) fopen((name).c_str(), data)
 #define OPEN_FILE_C(name, data) fopen(name, data)
 
@@ -13,6 +15,7 @@ std::vector<std::string> File::m_temp_files;
 
 File::FileReadResult File::read_all(const std::string &filename) {
     FILE *file = OPEN_FILE(filename, "r");
+    std::cout << filename << std::endl;
 
     fseek(file, 0, SEEK_END);
     size_t file_length = ftell(file);

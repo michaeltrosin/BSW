@@ -66,7 +66,7 @@ bsw::Window::Window(const WindowProps &window_props) {
         }
     });
 
-    glfwSetCharCallback(m_window, [](GLFWwindow *window, unsigned int keycode) {
+    glfwSetCharCallback(m_window, [](GLFWwindow *window, uint32_t keycode) {
         WindowData &data = *(WindowData *) glfwGetWindowUserPointer(window);
 
         KeyTypedEvent event(keycode);
@@ -130,13 +130,13 @@ void bsw::Window::shutdown() const {
     glfwTerminate();
 }
 
-unsigned int bsw::Window::get_width() const {
+uint32_t bsw::Window::get_width() const {
     int width;
     glfwGetWindowSize(m_window, &width, nullptr);
     return width;
 }
 
-unsigned int bsw::Window::get_height() const {
+uint32_t bsw::Window::get_height() const {
     int height;
     glfwGetWindowSize(m_window, nullptr, &height);
     return height;

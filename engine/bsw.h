@@ -3,6 +3,7 @@
 //
 #pragma once
 
+#include <core/assets/asset_manager.h>
 #include <imgui/imgui.h>
 #include <math/mathf.h>
 #include <utils/assertion.h>

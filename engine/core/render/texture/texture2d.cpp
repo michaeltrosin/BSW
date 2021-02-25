@@ -42,10 +42,9 @@ bsw::Texture2D::Texture2D(const std::string &path) {
     stbi_image_free(data);
 }
 
-bsw::Texture2D::Texture2D(uint32_t width, uint32_t height, GLint tex_param, uint32_t internalformat, uint32_t dataformat)
-    : m_width(width), m_height(height) {
-    m_internal_format = internalformat;
-    m_data_format = dataformat;
+bsw::Texture2D::Texture2D(uint32_t width, uint32_t height) : m_width(width), m_height(height) {
+    m_internal_format = GL_RGBA8;
+    m_data_format = GL_RGBA;
 
     glCreateTextures(GL_TEXTURE_2D, 1, &m_texture_id);
     glTextureStorage2D(m_texture_id, 1, m_internal_format, m_width, m_height);
@@ -53,8 +52,8 @@ bsw::Texture2D::Texture2D(uint32_t width, uint32_t height, GLint tex_param, uint
     glTextureParameteri(m_texture_id, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTextureParameteri(m_texture_id, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
-    glTextureParameteri(m_texture_id, GL_TEXTURE_WRAP_S, tex_param);
-    glTextureParameteri(m_texture_id, GL_TEXTURE_WRAP_T, tex_param);
+    glTextureParameteri(m_texture_id, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTextureParameteri(m_texture_id, GL_TEXTURE_WRAP_T, GL_REPEAT);
 }
 
 bsw::Texture2D::~Texture2D() { glDeleteTextures(1, &m_texture_id); }

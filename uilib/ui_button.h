@@ -7,7 +7,7 @@
 #include <bsw.h>
 #include <core/event/mouse_events.h>
 #include <core/font/font.h>
-#include <core/render/2d/renderer2d.h>
+#include <core/render/renderer2d.h>
 
 #include <glm/glm.hpp>
 #include <string>

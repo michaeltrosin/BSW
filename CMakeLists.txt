@@ -74,8 +74,8 @@ add_library(${ENGINE}
         engine/core/input/mouse_codes.h
         engine/core/screen/screen_stack.h
         engine/core/screen/screen_stack.cpp
-        engine/core/render/2d/renderer2d.cpp
-        engine/core/render/2d/renderer2d.h
+        engine/core/render/renderer2d.cpp
+        engine/core/render/renderer2d.h
         engine/core/event/event.h
         engine/core/event/mouse_events.h
         engine/core/event/key_events.h
@@ -105,7 +105,18 @@ add_library(${ENGINE}
         engine/core/render/camera.h
         engine/core/input/input.h
         engine/core/input/input.cpp
-        engine/math/mathf.cpp)
+        engine/math/mathf.cpp
+        engine/core/render/texture/texture_atlas.cpp
+        engine/core/render/texture/texture_atlas.h
+        engine/core/render/geometry_renderer.cpp
+        engine/core/render/geometry_renderer.h
+        engine/core/render/buffer/shader_storage_buffer.cpp
+        engine/core/render/buffer/shader_storage_buffer.h
+        engine/core/render/geometry.cpp
+        engine/core/render/geometry.h
+        engine/core/assets/asset_manager.cpp
+        engine/core/assets/asset_manager.h
+        )
 
 include_directories(engine)
 include_directories(uilib)
@@ -124,3 +135,11 @@ include_directories(${DEP_FOLDER}/freetype-2.10.4/include)
 find_package(OpenGL REQUIRED)
 include_directories(${OPENGL_INCLUDE_DIR})
 target_link_libraries(${ENGINE} opengl32 glfw freetype)
+
+#
+#   Copy resource folder to output
+#
+file(REMOVE_RECURSE ${CMAKE_CURRENT_BINARY_DIR}/resources)
+file(COPY resources
+   DESTINATION ${CMAKE_CURRENT_BINARY_DIR}
+)
