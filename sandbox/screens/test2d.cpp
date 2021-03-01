@@ -29,19 +29,17 @@ void Test2D::on_render() {
 
     glm::mat4 text_cam = glm::translate(glm::mat4(1.0f), glm::vec3(window_width() / 4, window_height() / 4, 0));
 
-//    Renderer2D::begin(m_projection);
-////    Renderer2D::draw_quad({250, 250, 0.0f}, {300, 300}, {1.0f, 0.0f, 0.0f, 0.7f});
-////    Renderer2D::draw_quad({200, 200, 0.0f}, {900, 900}, {1.0f, 0.0f, 0.0f, 0.5f});
-//    Renderer2D::end();
+    //    Renderer2D::begin(m_projection);
+    ////    Renderer2D::draw_quad({250, 250, 0.0f}, {300, 300}, {1.0f, 0.0f, 0.0f, 0.7f});
+    ////    Renderer2D::draw_quad({200, 200, 0.0f}, {900, 900}, {1.0f, 0.0f, 0.0f, 0.5f});
+    //    Renderer2D::end();
 
     Renderer2D::begin(m_projection);
-    //    Renderer2D::draw_centered_string("BSW::Sandbox",
-    //                                     {window_width() / 2, window_height() / 2},
-    //                                     *FontManager::get_font("Title"), white.darken());
+    Renderer2D::draw_centered_string("BSW::Sandbox", {window_width() / 2, window_height() / 2}, *FontManager::get_font("Title"), rainbow);
     Renderer2D::draw_centered_string("Some small games written in bsw",
                                      {window_width() / 2, window_height() / 2 + FontManager::default_font->get_string_height("H")},
                                      *FontManager::default_font, Color::violet);
-    Renderer2D::draw_rotated_quad({250, 250, 1.0f}, {300, 300}, rot, at, 0.5f);
+    Renderer2D::draw_rotated_quad({250, 250, 1.0f}, {300, 300}, rot, at, 1.0f);
     Renderer2D::end();
 }
 

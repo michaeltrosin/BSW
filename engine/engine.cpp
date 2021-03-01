@@ -6,11 +6,8 @@
 
 #include <bsw.h>
 #include <core/font/font_manager.h>
-#include <core/render/geometry_renderer.h>
 #include <core/render/gl_render.h>
 #include <core/render/renderer2d.h>
-#include <utils/file.h>
-#include <core/assets/asset_manager.h>
 
 Single<bsw::Engine> bsw::Engine::m_instance;
 
@@ -44,7 +41,6 @@ void bsw::Engine::initialize() {
 
     GlRenderer::init();
     Renderer2D::init();
-    GeometryRenderer::init();
 
     FontManager::init();
 }

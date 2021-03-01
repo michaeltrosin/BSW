@@ -6,7 +6,7 @@
 
 #include <glad/glad.h>
 
-static GLenum ShaderDataTypeToOpenGlBaseType(bsw::ShaderDataType type) {
+static GLenum shader_data_type_to_open_gl_base_type(bsw::ShaderDataType type) {
     switch (type) {
         case bsw::ShaderDataType::FLOAT:
         case bsw::ShaderDataType::FLOAT_2:
@@ -28,6 +28,7 @@ static GLenum ShaderDataTypeToOpenGlBaseType(bsw::ShaderDataType type) {
 
 bsw::VertexArray::VertexArray() : m_render_id{0}, m_vertex_buffer_index{0} { glCreateVertexArrays(1, &m_render_id); }
 bsw::VertexArray::~VertexArray() { glDeleteVertexArrays(1, &m_render_id); }
+
 void bsw::VertexArray::bind() const { glBindVertexArray(m_render_id); }
 void bsw::VertexArray::unbind() const { glBindVertexArray(0); }
 void bsw::VertexArray::add_vertex_buffer(const Ref<VertexBuffer> &vertex_buffer) {
@@ -42,7 +43,7 @@ void bsw::VertexArray::add_vertex_buffer(const Ref<VertexBuffer> &vertex_buffer)
             case ShaderDataType::FLOAT_3:
             case ShaderDataType::FLOAT_4: {
                 glEnableVertexAttribArray(m_vertex_buffer_index);
-                glVertexAttribPointer(m_vertex_buffer_index, element.get_component_count(), ShaderDataTypeToOpenGlBaseType(element.type),
+                glVertexAttribPointer(m_vertex_buffer_index, element.get_component_count(), shader_data_type_to_open_gl_base_type(element.type),
                                       element.normalized ? GL_TRUE : GL_FALSE, layout.get_stride(), (const void *) element.offset);
                 m_vertex_buffer_index++;
                 break;
@@ -53,7 +54,7 @@ void bsw::VertexArray::add_vertex_buffer(const Ref<VertexBuffer> &vertex_buffer)
             case ShaderDataType::INT_4:
             case ShaderDataType::BOOL: {
                 glEnableVertexAttribArray(m_vertex_buffer_index);
-                glVertexAttribIPointer(m_vertex_buffer_index, element.get_component_count(), ShaderDataTypeToOpenGlBaseType(element.type),
+                glVertexAttribIPointer(m_vertex_buffer_index, element.get_component_count(), shader_data_type_to_open_gl_base_type(element.type),
                                        layout.get_stride(), (const void *) element.offset);
                 m_vertex_buffer_index++;
                 break;
@@ -63,7 +64,7 @@ void bsw::VertexArray::add_vertex_buffer(const Ref<VertexBuffer> &vertex_buffer)
                 uint8_t count = element.get_component_count();
                 for (uint8_t i = 0; i < count; i++) {
                     glEnableVertexAttribArray(m_vertex_buffer_index);
-                    glVertexAttribPointer(m_vertex_buffer_index, count, ShaderDataTypeToOpenGlBaseType(element.type),
+                    glVertexAttribPointer(m_vertex_buffer_index, count, shader_data_type_to_open_gl_base_type(element.type),
                                           element.normalized ? GL_TRUE : GL_FALSE, layout.get_stride(),
                                           (const void *) (element.offset + sizeof(float) * count * i));
                     glVertexAttribDivisor(m_vertex_buffer_index, 1);

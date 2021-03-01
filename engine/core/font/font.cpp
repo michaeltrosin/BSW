@@ -98,6 +98,7 @@ uint32_t bsw::Font::get_string_width(const std::string &text) const {
     }
     return width;
 }
+
 uint32_t bsw::Font::get_string_height(const std::string &text) const {
     uint32_t height = 0;
     std::string::const_iterator c;

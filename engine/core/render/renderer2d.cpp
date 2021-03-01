@@ -11,11 +11,11 @@
 #include <glm/gtc/matrix_transform.hpp>
 
 struct QuadVertex {
-    glm::vec3 position;
+    glm::vec3 position{};
     Color color;
-    glm::vec2 tex_coord;
-    float tex_index;
-    float tiling_factor;
+    glm::vec2 tex_coord{};
+    float tex_index{};
+    float tiling_factor{};
 };
 
 struct Renderer2DData {
