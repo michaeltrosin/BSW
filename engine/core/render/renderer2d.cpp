@@ -6,7 +6,7 @@
 
 #include <bsw.h>
 #include <core/render/gl_render.h>
-#include <core/render/shader.h>
+#include <core/render/shading/shader.h>
 
 #include <glm/gtc/matrix_transform.hpp>
 

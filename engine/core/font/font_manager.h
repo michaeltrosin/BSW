@@ -9,6 +9,8 @@
 
 #include <vector>
 
+//TODO: Add direct font loading from name
+
 namespace bsw {
 class FontManager {
 public:

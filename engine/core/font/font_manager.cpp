@@ -8,7 +8,7 @@ std::unordered_map<std::string, Single<bsw::Font>> bsw::FontManager::m_font_list
 Single<bsw::Font> bsw::FontManager::default_font;
 
 //FIXME: Make dynamic
-void bsw::FontManager::init() { default_font = create_single<Font>(R"(F:\BSW\resources\fonts\Roboto-Light.ttf)", 24); }
+void bsw::FontManager::init() { default_font = create_single<Font>(AssetManager::get_asset_path("fonts\\Roboto-Light.ttf"), 24); }
 
 void bsw::FontManager::add_font(const std::string &name, const std::string &font_file, uint32_t font_size) {
     font_size = (uint32_t) mathf::min(font_size, 48);

@@ -84,8 +84,8 @@ add_library(${ENGINE}
         engine/core/event/window_events.h
         engine/core/event/event_handler.cpp
         engine/core/event/event_handler.h
-        engine/core/render/shader.cpp
-        engine/core/render/shader.h
+        engine/core/render/shading/shader.cpp
+        engine/core/render/shading/shader.h
         engine/core/render/buffer/vertex_buffer.cpp
         engine/core/render/buffer/vertex_buffer.h
         engine/core/render/buffer/index_buffer.cpp
