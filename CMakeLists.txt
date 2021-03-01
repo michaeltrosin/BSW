@@ -6,6 +6,7 @@ set(CMAKE_CXX_STANDARD 17)
 set(DEP_FOLDER ${CMAKE_CURRENT_SOURCE_DIR}/dependencies)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17")
 
+#TODO: Remove on release build!!
 add_compile_definitions(DEBUG)
 
 set(ENGINE BSWCore)
