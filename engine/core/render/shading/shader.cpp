@@ -147,3 +147,4 @@ void bsw::Shader::set_mat_4(const std::string &name, const glm::mat4 &matrix) {
     int location = get_uniform_location(name);
     if (location != -1) glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(matrix));
 }
+void bsw::Shader::set_bool(const std::string &name, bool value) { set_int(name, (int) value); }
