@@ -108,12 +108,6 @@ add_library(${ENGINE}
         engine/math/mathf.cpp
         engine/core/render/texture/texture_atlas.cpp
         engine/core/render/texture/texture_atlas.h
-        engine/core/render/geometry_renderer.cpp
-        engine/core/render/geometry_renderer.h
-        engine/core/render/buffer/shader_storage_buffer.cpp
-        engine/core/render/buffer/shader_storage_buffer.h
-        engine/core/render/geometry.cpp
-        engine/core/render/geometry.h
         engine/core/assets/asset_manager.cpp
         engine/core/assets/asset_manager.h
         )
