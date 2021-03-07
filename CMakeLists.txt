@@ -18,7 +18,7 @@ add_executable(${SANDBOX}
         sandbox/main.cpp
         sandbox/screens/test2d.cpp
         sandbox/screens/test2d.h
-        )
+        "sandbox/test platformer/platformer.cpp" "sandbox/test platformer/platformer.h")
 
 target_link_libraries(${SANDBOX} ${ENGINE}
         ${UILIB}
