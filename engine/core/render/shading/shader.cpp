@@ -11,11 +11,16 @@
 #include <utility>
 #include <vector>
 
-// Shader::Shader(const std::string &filename) {}
-bsw::Shader::Shader(std::string name, const std::string &vertex_src, const std::string &fragment_src) : m_name(std::move(name)), m_program_id{0} {
+bsw::Shader::Shader(std::string filename) : m_name(std::move(filename)), m_program_id{0} {
     ASSERT_TYPE(uint32_t, GLuint);
 
-    compile(vertex_src, fragment_src);
+    std::string vert_path = std::string(m_name).append(".vert");
+    std::string frag_path = std::string(m_name).append(".frag");
+
+    auto read_vert = AssetManager::read_all(vert_path);
+    auto read_frag = AssetManager::read_all(frag_path);
+
+    compile(read_vert.data, read_frag.data);
 }
 
 bsw::Shader::~Shader() { glDeleteProgram(m_program_id); }
@@ -148,3 +153,82 @@ void bsw::Shader::set_mat_4(const std::string &name, const glm::mat4 &matrix) {
     if (location != -1) glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(matrix));
 }
 void bsw::Shader::set_bool(const std::string &name, bool value) { set_int(name, (int) value); }
+
+void bsw::Shader::set_struct(const std::string &name, const ShaderStruct &shader_struct) {
+    for (const auto &values : shader_struct.m_struct_content) {
+        std::string value_name = name;
+        auto [type, value] = values.second;
+        value_name = value_name.append(".");
+        value_name = value_name.append(values.first);
+
+        switch (type) {
+            case STYPE_BOOL: set_bool(value_name, value.bval); break;
+            case STYPE_INT: set_int(value_name, value.ival); break;
+            case STYPE_FLOAT: set_float(value_name, value.fval); break;
+
+            case STYPE_VEC_2: set_float_2(value_name, value.vec_2_val); break;
+            case STYPE_VEC_3: set_float_3(value_name, value.vec_3_val); break;
+            case STYPE_VEC_4: set_float_4(value_name, value.vec_4_val); break;
+
+            case STYPE_MAT_3: set_mat_3(value_name, value.mat_3_val); break;
+            case STYPE_MAT_4: set_mat_4(value_name, value.mat_4_val); break;
+            default: break;
+        }
+    }
+}
+
+void bsw::ShaderStruct::set(const std::string &name, int value) {
+    if (!exists(name)) return;
+    Value val{};
+    val.ival = value;
+    m_struct_content[name] = std::make_pair(STYPE_INT, val);
+}
+//void bsw::ShaderStruct::set(const std::string &name, int *values, uint32_t count) {}
+void bsw::ShaderStruct::set(const std::string &name, bool value) {
+    if (!exists(name)) return;
+    Value val{};
+    val.bval = value;
+    m_struct_content[name] = std::make_pair(STYPE_BOOL, val);
+}
+void bsw::ShaderStruct::set(const std::string &name, float value) {
+    if (!exists(name)) return;
+    Value val{};
+    val.fval = value;
+    m_struct_content[name] = std::make_pair(STYPE_FLOAT, val);
+}
+void bsw::ShaderStruct::set(const std::string &name, const glm::vec2 &value) {
+    if (!exists(name)) return;
+    Value val{};
+    val.vec_2_val = value;
+    m_struct_content[name] = std::make_pair(STYPE_VEC_2, val);
+}
+void bsw::ShaderStruct::set(const std::string &name, const glm::vec3 &value) {
+    if (!exists(name)) return;
+    Value val{};
+    val.vec_3_val = value;
+    m_struct_content[name] = std::make_pair(STYPE_VEC_3, val);
+}
+void bsw::ShaderStruct::set(const std::string &name, const glm::vec4 &value) {
+    if (!exists(name)) return;
+    Value val{};
+    val.vec_4_val = value;
+    m_struct_content[name] = std::make_pair(STYPE_VEC_4, val);
+}
+void bsw::ShaderStruct::set(const std::string &name, const glm::mat3 &matrix) {
+    if (!exists(name)) return;
+    Value val{};
+    val.mat_3_val = matrix;
+    m_struct_content[name] = std::make_pair(STYPE_MAT_3, val);
+}
+void bsw::ShaderStruct::set(const std::string &name, const glm::mat4 &matrix) {
+    if (!exists(name)) return;
+    Value val{};
+    val.mat_4_val = matrix;
+    m_struct_content[name] = std::make_pair(STYPE_MAT_4, val);
+}
+bsw::ShaderStruct bsw::ShaderStruct::construct(const std::unordered_map<std::string, uint32_t> &template_data) {
+    ShaderStruct result;
+    result.m_template = template_data;
+    return result;
+}
+bool bsw::ShaderStruct::exists(const std::string &name) { return m_template.find(name) != m_template.end(); }
