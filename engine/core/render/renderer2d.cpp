@@ -80,8 +80,7 @@ void bsw::Renderer2D::init() {
     int32_t samplers[Renderer2DData::max_texture_slots];
     for (uint32_t i = 0; i < Renderer2DData::max_texture_slots; i++) samplers[i] = i;
 
-    data.texture_shader =
-        create_ref<Shader>("basic_texture", AssetManager::read_all("shader/basic.vert").data, AssetManager::read_all("shader/basic.frag").data);
+    data.texture_shader = create_ref<Shader>("shader/basic");
 
     data.texture_shader->bind();
 
