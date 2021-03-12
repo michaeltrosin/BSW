@@ -7,7 +7,7 @@ set(DEP_FOLDER ${CMAKE_CURRENT_SOURCE_DIR}/dependencies)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17")
 
 #TODO: Remove on release build!!
-add_compile_definitions(DEBUG)
+add_compile_definitions(BUILD_DEBUG)
 
 set(ENGINE BSWCore)
 set(UILIB BSWUI)
@@ -111,7 +111,7 @@ add_library(${ENGINE}
         engine/core/render/texture/texture_atlas.h
         engine/core/assets/asset_manager.cpp
         engine/core/assets/asset_manager.h
-        )
+        engine/utils/logging.h)
 
 include_directories(engine)
 include_directories(uilib)

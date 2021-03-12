@@ -6,7 +6,7 @@
 #include <cstdio>
 #include <iostream>
 
-#ifdef DEBUG
+#ifdef BUILD_DEBUG
 #define ASSERT(x, msg)                                                                                                                               \
     do {                                                                                                                                             \
         if (!(x)) {                                                                                                                                  \
