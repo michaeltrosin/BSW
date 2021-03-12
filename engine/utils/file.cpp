@@ -6,20 +6,14 @@
 
 #include <cstdio>
 
-#include <iostream>
-
 #define OPEN_FILE(name, data) fopen((name).c_str(), data)
-#define OPEN_FILE_C(name, data) fopen(name, data)
 
 std::vector<std::string> File::m_temp_files;
 
 File::FileReadResult File::read_all(const std::string &filename) {
     FILE *file = OPEN_FILE(filename, "r");
-    std::cout << filename << std::endl;
 
-    fseek(file, 0, SEEK_END);
-    size_t file_length = ftell(file);
-    rewind(file);
+    size_t file_length = get_file_size(filename);
 
     char *buffer = new char[file_length + 1];
     int index = 0;
@@ -51,9 +45,7 @@ void File::write_all(const std::string &filename, const char *buffer) {
 File::FileReadResult File::read_all_binary(const std::string &filename) {
     FILE *file = OPEN_FILE(filename, "rb");
 
-    fseek(file, 0, SEEK_END);
-    size_t file_length = ftell(file);
-    rewind(file);
+    size_t file_length = get_file_size(filename);
 
     char *buffer = new char[file_length];
     fread(buffer, file_length, 1, file);
@@ -106,3 +98,13 @@ std::string File::create_temp_file() {
 }
 
 char &File::FileReadResult::operator[](int index) const { return data[index]; }
+
+size_t File::get_file_size(const std::string &filename) {
+    FILE *file = OPEN_FILE(filename, "rb");
+
+    fseek(file, 0, SEEK_END);
+    size_t file_length = ftell(file);
+
+    fclose(file);
+    return file_length;
+}

@@ -32,6 +32,8 @@ public:
 
     static void cleanup_temp_files();
 
+    static size_t get_file_size(const std::string &filename);
+
 private:
     static std::vector<std::string> m_temp_files;
 };
