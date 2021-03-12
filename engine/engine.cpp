@@ -7,7 +7,6 @@
 #include <bsw.h>
 #include <core/font/font_manager.h>
 #include <core/render/gl_render.h>
-#include <core/render/renderer2d.h>
 
 Single<bsw::Engine> bsw::Engine::m_instance;
 

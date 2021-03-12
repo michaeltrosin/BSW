@@ -8,7 +8,6 @@
 #include <glad/glad.h>
 
 #include <glm/gtc/type_ptr.hpp>
-#include <utility>
 #include <vector>
 
 bsw::Shader::Shader(std::string filename) : m_name(std::move(filename)), m_program_id{0} {
@@ -20,18 +19,23 @@ bsw::Shader::Shader(std::string filename) : m_name(std::move(filename)), m_progr
     auto read_vert = AssetManager::read_all(vert_path);
     auto read_frag = AssetManager::read_all(frag_path);
 
-    compile(read_vert.data, read_frag.data);
+    const char *vert_data = read_vert.data;
+    const char *frag_data = read_frag.data;
+
+    compile(vert_data, frag_data);
 }
 
 bsw::Shader::~Shader() { glDeleteProgram(m_program_id); }
 
 void bsw::Shader::bind() const { glUseProgram(m_program_id); }
+
 void bsw::Shader::unbind() const { glUseProgram(0); }
-void bsw::Shader::compile(const std::string &vertex_src, const std::string &fragment_src) {
 
+void bsw::Shader::compile(const char *vertex_src, const char *fragment_src) {
     // TODO: Optimize shader linking
-
     GLuint program = glCreateProgram();
+
+    std::printf("%s\n", fragment_src);
 
     bool status_vert;
     bool status_frag;
@@ -75,11 +79,10 @@ void bsw::Shader::compile(const std::string &vertex_src, const std::string &frag
     }
 }
 
-GLuint bsw::Shader::compile_shader_source(const std::string &src, GLenum type, bool &compile_status) const {
+GLuint bsw::Shader::compile_shader_source(const char *src, GLenum type, bool &compile_status) const {
     GLuint shader = glCreateShader(type);
-    const GLchar *src_cstr = src.c_str();
 
-    glShaderSource(shader, 1, &src_cstr, nullptr);
+    glShaderSource(shader, 1, &src, nullptr);
     glCompileShader(shader);
 
     GLint is_compiled = 0;
@@ -183,7 +186,9 @@ void bsw::ShaderStruct::set(const std::string &name, int value) {
     val.ival = value;
     m_struct_content[name] = std::make_pair(STYPE_INT, val);
 }
+
 //void bsw::ShaderStruct::set(const std::string &name, int *values, uint32_t count) {}
+
 void bsw::ShaderStruct::set(const std::string &name, bool value) {
     if (!exists(name)) return;
     Value val{};

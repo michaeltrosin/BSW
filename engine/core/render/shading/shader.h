@@ -86,8 +86,8 @@ public:
     void set_mat_4(const std::string &name, const glm::mat4 &matrix);
 
 private:
-    void compile(const std::string &vertex_src, const std::string &fragment_src);
-    uint32_t compile_shader_source(const std::string &src, uint32_t type, bool &compile_status) const;
+    void compile(const char *vertex_src, const char *fragment_src);
+    uint32_t compile_shader_source(const char *src, uint32_t type, bool &compile_status) const;
 
     int get_uniform_location(const std::string &name);
 
