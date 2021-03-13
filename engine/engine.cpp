@@ -85,7 +85,7 @@ int bsw::Engine::run() {
 
         m_main_window->gui_handler()->begin();
 
-#ifdef DEBUG
+#ifdef BUILD_DEBUG
         ImGui::Begin("Debug", nullptr, ImGuiWindowFlags_AlwaysAutoResize);
         ImGui::Text("FPS: %d", current_fps);
         ImGui::Text("Updates: %d", current_updates);
