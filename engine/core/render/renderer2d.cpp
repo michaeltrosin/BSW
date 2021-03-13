@@ -56,8 +56,6 @@ struct Renderer2DData {
 static Renderer2DData data;
 
 void bsw::Renderer2D::init() {
-    //std::printf("Center? %d\n", data.anchor_position == AnchorPosition::CENTER);
-
     data.quad_vertex_array = create_ref<VertexArray>();
     data.quad_vertex_buffer = create_ref<VertexBuffer>(Renderer2DData::max_vertices * sizeof(QuadVertex));
     data.quad_vertex_buffer->set_layout({{ShaderDataType::FLOAT_3, "a_Position"},
@@ -224,13 +222,11 @@ void bsw::Renderer2D::draw_quad(const glm::mat4 &transform, const Ref<Texture2D>
     data.stats.quad_count++;
 }
 
-void bsw::Renderer2D::draw_rotated_quad(const glm::vec2 &position, const glm::vec2 &size, float rotation, const Color &color,
-                                        uint32_t anchor_position) {
-    draw_rotated_quad({position.x, position.y, 0.0f}, size, rotation, color, anchor_position);
+void bsw::Renderer2D::draw_rotated_quad(const glm::vec2 &position, const glm::vec2 &size, float rotation, const Color &color) {
+    draw_rotated_quad({position.x, position.y, 0.0f}, size, rotation, color);
 }
 
-void bsw::Renderer2D::draw_rotated_quad(const glm::vec3 &position, const glm::vec2 &size, float rotation, const Color &color,
-                                        uint32_t anchor_position) {
+void bsw::Renderer2D::draw_rotated_quad(const glm::vec3 &position, const glm::vec2 &size, float rotation, const Color &color) {
     glm::mat4 transform = glm::translate(glm::mat4(1.0f), position) * glm::rotate(glm::mat4(1.0f), glm::radians(rotation), {0.0f, 0.0f, 1.0f})
                         * glm::scale(glm::mat4(1.0f), {size.x, size.y, 1.0f});
 
@@ -245,20 +241,14 @@ void bsw::Renderer2D::draw_rotated_quad(const glm::vec3 &position, const glm::ve
 }
 
 void bsw::Renderer2D::draw_rotated_quad(const glm::vec2 &position, const glm::vec2 &size, float rotation, const Ref<Texture2D> &texture,
-                                        float tiling_factor, const Color &tint_color, uint32_t anchor_position) {
-    draw_rotated_quad({position.x, position.y, 0.0f}, size, rotation, texture, tiling_factor, tint_color, anchor_position);
+                                        float tiling_factor, const Color &tint_color) {
+    draw_rotated_quad({position.x, position.y, 0.0f}, size, rotation, texture, tiling_factor, tint_color);
 }
 
 void bsw::Renderer2D::draw_rotated_quad(const glm::vec3 &position, const glm::vec2 &size, float rotation, const Ref<Texture2D> &texture,
-                                        float tiling_factor, const Color &tint_color, uint32_t anchor_position) {
-    glm::mat4 transform;
-    if (anchor_position == AnchorCC) {
-        transform = glm::translate(glm::mat4(1.0f), position) * glm::rotate(glm::mat4(1.0f), glm::radians(rotation), {0.0f, 0.0f, 1.0f})
-                  * glm::scale(glm::mat4(1.0f), {size.x, size.y, 1.0f});
-    } else {
-        transform = glm::translate(glm::mat4(1.0f), perform_origin_transform(position, size, data.anchor_position))
-                  * glm::rotate(glm::mat4(1.0f), glm::radians(rotation), {0.0f, 0.0f, 1.0f}) * glm::scale(glm::mat4(1.0f), {size.x, size.y, 1.0f});
-    }
+                                        float tiling_factor, const Color &tint_color) {
+    glm::mat4 transform = glm::translate(glm::mat4(1.0f), position) * glm::rotate(glm::mat4(1.0f), glm::radians(rotation), {0.0f, 0.0f, 1.0f})
+                        * glm::scale(glm::mat4(1.0f), {size.x, size.y, 1.0f});
 
     draw_quad(transform, texture, tiling_factor, tint_color);
 }
