@@ -103,7 +103,7 @@ add_library(${ENGINE}
         engine/core/font/font_manager.h
         engine/math/color.cpp
         engine/math/color.h
-        engine/core/render/camera.h
+        engine/core/render/camera/camera.h
         engine/core/input/input.h
         engine/core/input/input.cpp
         engine/math/mathf.cpp
