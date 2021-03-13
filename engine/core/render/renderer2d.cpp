@@ -10,6 +10,16 @@
 
 #include <glm/gtc/matrix_transform.hpp>
 
+const uint32_t AnchorTL = (uint32_t)(bsw::AnchorPosition::TOP | bsw::AnchorPosition::LEFT);
+const uint32_t AnchorTC = (uint32_t)(bsw::AnchorPosition::TOP | bsw::AnchorPosition::CENTER);
+const uint32_t AnchorTR = (uint32_t)(bsw::AnchorPosition::TOP | bsw::AnchorPosition::RIGHT);
+const uint32_t AnchorCL = (uint32_t)(bsw::AnchorPosition::CENTER | bsw::AnchorPosition::LEFT);
+const uint32_t AnchorCC = (uint32_t)(bsw::AnchorPosition::CENTER | bsw::AnchorPosition::CENTER);
+const uint32_t AnchorCR = (uint32_t)(bsw::AnchorPosition::CENTER | bsw::AnchorPosition::RIGHT);
+const uint32_t AnchorBL = (uint32_t)(bsw::AnchorPosition::BOTTOM | bsw::AnchorPosition::LEFT);
+const uint32_t AnchorBC = (uint32_t)(bsw::AnchorPosition::BOTTOM | bsw::AnchorPosition::CENTER);
+const uint32_t AnchorBR = (uint32_t)(bsw::AnchorPosition::BOTTOM | bsw::AnchorPosition::RIGHT);
+
 struct QuadVertex {
     glm::vec3 position{};
     Color color;
@@ -23,6 +33,8 @@ struct Renderer2DData {
     static constexpr uint32_t max_vertices = max_quads * 4;
     static constexpr uint32_t max_indices = max_quads * 6;
     static constexpr uint32_t max_texture_slots = 32;// TODO: RenderCaps
+
+    uint32_t anchor_position = (uint32_t) bsw::AnchorPosition::CENTER;
 
     Ref<bsw::VertexArray> quad_vertex_array;
     Ref<bsw::VertexBuffer> quad_vertex_buffer;
@@ -44,6 +56,8 @@ struct Renderer2DData {
 static Renderer2DData data;
 
 void bsw::Renderer2D::init() {
+    //std::printf("Center? %d\n", data.anchor_position == AnchorPosition::CENTER);
+
     data.quad_vertex_array = create_ref<VertexArray>();
     data.quad_vertex_buffer = create_ref<VertexBuffer>(Renderer2DData::max_vertices * sizeof(QuadVertex));
     data.quad_vertex_buffer->set_layout({{ShaderDataType::FLOAT_3, "a_Position"},
@@ -132,7 +146,8 @@ void bsw::Renderer2D::draw_quad(const glm::vec2 &position, const glm::vec2 &size
     draw_quad({position.x, position.y, 0.0f}, size, color);
 }
 void bsw::Renderer2D::draw_quad(const glm::vec3 &position, const glm::vec2 &size, const Color &color) {
-    glm::mat4 transform = glm::translate(glm::mat4(1.0f), position) * glm::scale(glm::mat4(1.0f), {size.x, size.y, 1.0f});
+    glm::mat4 transform = glm::translate(glm::mat4(1.0f), perform_origin_transform(position, size, data.anchor_position))
+                        * glm::scale(glm::mat4(1.0f), {size.x, size.y, 1.0f});
 
     draw_quad(transform, color);
 }
@@ -144,7 +159,8 @@ void bsw::Renderer2D::draw_quad(const glm::vec2 &position, const glm::vec2 &size
 
 void bsw::Renderer2D::draw_quad(const glm::vec3 &position, const glm::vec2 &size, const Ref<Texture2D> &texture, glm::vec2 *texture_coords,
                                 float tiling_factor, const Color &tint_color) {
-    glm::mat4 transform = glm::translate(glm::mat4(1.0f), position) * glm::scale(glm::mat4(1.0f), {size.x, size.y, 1.0f});
+    glm::mat4 transform = glm::translate(glm::mat4(1.0f), perform_origin_transform(position, size, data.anchor_position))
+                        * glm::scale(glm::mat4(1.0f), {size.x, size.y, 1.0f});
 
     draw_quad(transform, texture, texture_coords, tiling_factor, tint_color);
 }
@@ -194,10 +210,6 @@ void bsw::Renderer2D::draw_quad(const glm::mat4 &transform, const Ref<Texture2D>
         data.texture_slot_index++;
     }
 
-    //    if (tint_color.get_a() != 255) {
-    //        color = color.blend(tint_color)
-    //    }
-
     for (size_t i = 0; i < quad_vertex_count; i++) {
         data.quad_vertex_buffer_ptr->position = transform * data.quad_vertex_positions[i];
         data.quad_vertex_buffer_ptr->color = color;
@@ -212,24 +224,41 @@ void bsw::Renderer2D::draw_quad(const glm::mat4 &transform, const Ref<Texture2D>
     data.stats.quad_count++;
 }
 
-void bsw::Renderer2D::draw_rotated_quad(const glm::vec2 &position, const glm::vec2 &size, float rotation, const Color &color) {
-    draw_rotated_quad({position.x, position.y, 0.0f}, size, rotation, color);
+void bsw::Renderer2D::draw_rotated_quad(const glm::vec2 &position, const glm::vec2 &size, float rotation, const Color &color,
+                                        uint32_t anchor_position) {
+    draw_rotated_quad({position.x, position.y, 0.0f}, size, rotation, color, anchor_position);
 }
 
-void bsw::Renderer2D::draw_rotated_quad(const glm::vec3 &position, const glm::vec2 &size, float rotation, const Color &color) {
+void bsw::Renderer2D::draw_rotated_quad(const glm::vec3 &position, const glm::vec2 &size, float rotation, const Color &color,
+                                        uint32_t anchor_position) {
     glm::mat4 transform = glm::translate(glm::mat4(1.0f), position) * glm::rotate(glm::mat4(1.0f), glm::radians(rotation), {0.0f, 0.0f, 1.0f})
                         * glm::scale(glm::mat4(1.0f), {size.x, size.y, 1.0f});
+
+    //TODO:      ROTATE AROUND ORIGIN:
+    //              - Start with an identity matrix (mat4(1.0f))
+    //              - Translate the matrix by -centre of the object
+    //              - Rotate the matrix by the desired amount
+    //              - Translate the matrix by centre of the object
+    //              - Use the resulting matrix to transform the object that you desire to rotate
 
     draw_quad(transform, color);
 }
+
 void bsw::Renderer2D::draw_rotated_quad(const glm::vec2 &position, const glm::vec2 &size, float rotation, const Ref<Texture2D> &texture,
-                                        float tiling_factor, const Color &tint_color) {
-    draw_rotated_quad({position.x, position.y, 0.0f}, size, rotation, texture, tiling_factor, tint_color);
+                                        float tiling_factor, const Color &tint_color, uint32_t anchor_position) {
+    draw_rotated_quad({position.x, position.y, 0.0f}, size, rotation, texture, tiling_factor, tint_color, anchor_position);
 }
+
 void bsw::Renderer2D::draw_rotated_quad(const glm::vec3 &position, const glm::vec2 &size, float rotation, const Ref<Texture2D> &texture,
-                                        float tiling_factor, const Color &tint_color) {
-    glm::mat4 transform = glm::translate(glm::mat4(1.0f), position) * glm::rotate(glm::mat4(1.0f), glm::radians(rotation), {0.0f, 0.0f, 1.0f})
-                        * glm::scale(glm::mat4(1.0f), {size.x, size.y, 1.0f});
+                                        float tiling_factor, const Color &tint_color, uint32_t anchor_position) {
+    glm::mat4 transform;
+    if (anchor_position == AnchorCC) {
+        transform = glm::translate(glm::mat4(1.0f), position) * glm::rotate(glm::mat4(1.0f), glm::radians(rotation), {0.0f, 0.0f, 1.0f})
+                  * glm::scale(glm::mat4(1.0f), {size.x, size.y, 1.0f});
+    } else {
+        transform = glm::translate(glm::mat4(1.0f), perform_origin_transform(position, size, data.anchor_position))
+                  * glm::rotate(glm::mat4(1.0f), glm::radians(rotation), {0.0f, 0.0f, 1.0f}) * glm::scale(glm::mat4(1.0f), {size.x, size.y, 1.0f});
+    }
 
     draw_quad(transform, texture, tiling_factor, tint_color);
 }
@@ -243,17 +272,20 @@ void bsw::Renderer2D::draw_quad(const glm::mat4 &transform, const Ref<Texture2D>
 
     draw_quad(transform, texture, tex_coords, tiling_factor, tint_color);
 }
+
 void bsw::Renderer2D::draw_quad(const glm::vec3 &position, const glm::vec2 &size, const Ref<Texture2D> &texture, float tiling_factor,
                                 const Color &tint_color) {
     glm::vec2 tex_coords[] = {{0.0f, 0.0f}, {1.0f, 0.0f}, {1.0f, 1.0f}, {0.0f, 1.0f}};
 
     draw_quad(position, size, texture, tex_coords, tiling_factor, tint_color);
 }
+
 void bsw::Renderer2D::draw_quad(const glm::vec2 &position, const glm::vec2 &size, const Ref<Texture2D> &texture, float tiling_factor,
                                 const Color &tint_color) {
     glm::vec2 tex_coords[] = {{0.0f, 0.0f}, {1.0f, 0.0f}, {1.0f, 1.0f}, {0.0f, 1.0f}};
     draw_quad(position, size, texture, tex_coords, tiling_factor, tint_color);
 }
+
 void bsw::Renderer2D::draw_sub_quad(const glm::vec2 &position, const glm::vec2 &size, const Ref<Texture2D> &texture, const glm::vec2 &cut_offset,
                                     const glm::vec2 &cut_size, float tiling_factor, const Color &tint_color) {
     float cutoffx = cut_offset.x;
@@ -281,6 +313,7 @@ void bsw::Renderer2D::draw_sub_quad(const glm::vec2 &position, const glm::vec2 &
 
     draw_quad(position, size, texture, tex_coords, tiling_factor, tint_color);
 }
+
 void bsw::Renderer2D::draw_sub_quad(const glm::vec3 &position, const glm::vec2 &size, const Ref<Texture2D> &texture, const glm::vec2 &cut_offset,
                                     const glm::vec2 &cut_size, float tiling_factor, const Color &tint_color) {
     float cutoffx = cut_offset.x;
@@ -308,6 +341,7 @@ void bsw::Renderer2D::draw_sub_quad(const glm::vec3 &position, const glm::vec2 &
 
     draw_quad(position, size, texture, tex_coords, tiling_factor, tint_color);
 }
+
 void bsw::Renderer2D::draw_sub_quad(const glm::mat4 &transform, const Ref<Texture2D> &texture, const glm::vec2 &cut_offset, const glm::vec2 &cut_size,
                                     float tiling_factor, const Color &tint_color) {
     float cutoffx = cut_offset.x;
@@ -373,3 +407,44 @@ void bsw::Renderer2D::draw_centered_string(const std::string &text, const glm::v
     draw_string(text, {position.x - width / 2, position.y - height / 2}, font, text_color);
 }
 #pragma endregion
+
+void bsw::Renderer2D::set_anchor_position(uint32_t anchor_position) { data.anchor_position = anchor_position; }
+
+/**
+ * LT CT RT
+ * LC CC RC
+ * LB CB RC
+ *
+ * 0:0   0.5:0   1:0
+ * 0:0.5 0.5:0.5 1:0.5
+ * 0:1   0.5:1   1:1
+ * @param position
+ * @param size
+ */
+glm::vec3 bsw::Renderer2D::perform_origin_transform(const glm::vec3 &position, const glm::vec2 &size, uint32_t anchor_position) {
+    float half_x = size.x / 2.0f;
+    float half_y = size.y / 2.0f;
+
+    if (anchor_position == AnchorCC) {
+        return position;
+    } else if (anchor_position == AnchorTL) {
+        return {position.x + half_x, position.y + half_y, position.z};
+    } else if (anchor_position == AnchorTC) {
+        return {position.x, position.y + half_y, position.z};
+    } else if (anchor_position == AnchorTR) {
+        return {position.x - half_x, position.y + half_y, position.z};
+    } else if (anchor_position == AnchorCL) {
+        return {position.x + half_x, position.y, position.z};
+    } else if (anchor_position == AnchorCR) {
+        return {position.x - half_x, position.y, position.z};
+    } else if (anchor_position == AnchorBL) {
+        return {position.x + half_x, position.y - half_y, position.z};
+    } else if (anchor_position == AnchorBC) {
+        return {position.x, position.y - half_y, position.z};
+    } else if (anchor_position == AnchorBR) {
+        return {position.x - half_x, position.y - half_y, position.z};
+    }
+
+    ERROR("Invalid Anchor Position! %d\n", data.anchor_position);
+    return position;
+}
