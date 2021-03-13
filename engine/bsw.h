@@ -7,6 +7,7 @@
 #include <imgui/imgui.h>
 #include <math/mathf.h>
 #include <utils/assertion.h>
+#include <utils/logging.h>
 #include <utils/macros.h>
 
 #include <cstdint>
