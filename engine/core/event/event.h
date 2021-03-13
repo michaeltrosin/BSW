@@ -16,7 +16,7 @@
 
 namespace bsw {
 enum class EventCategory : unsigned short {
-    NONxE = 0,
+    NONE = 0,
     INTERNAL = BIT(0),
     INPUT = BIT(1),
     KEYBOARD = BIT(2),
