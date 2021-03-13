@@ -6,5 +6,5 @@
 
 #include <cstdio>
 
-#define DEBUG(args...) std::printf("DEBUG: " args);
-#define ERROR(args...) std::printf("ERROR: " args);
+#define DEBUG(args...) std::printf("DEBUG: " args)
+#define ERROR(args...) std::printf("ERROR: " args)
