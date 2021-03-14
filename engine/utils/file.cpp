@@ -25,7 +25,7 @@ File::FileReadResult File::read_all(const std::string &filename) {
     buffer[file_length] = '\0';
 
     fclose(file);
-    return {buffer, file_length, filename};
+    return {file != nullptr, buffer, file_length, filename};
 }
 
 void File::write_all(const std::string &filename, const char *buffer) {
@@ -46,11 +46,10 @@ File::FileReadResult File::read_all_binary(const std::string &filename) {
     FILE *file = OPEN_FILE(filename, "rb");
 
     size_t file_length = get_file_size(filename);
-
     char *buffer = new char[file_length];
     fread(buffer, file_length, 1, file);
     fclose(file);
-    return {buffer, file_length, filename};
+    return {file != nullptr, buffer, file_length, filename};
 }
 
 void File::write_all_binary(const std::string &filename, const uint8_t *buffer, size_t count) {
@@ -98,6 +97,7 @@ std::string File::create_temp_file() {
 }
 
 char &File::FileReadResult::operator[](int index) const { return data[index]; }
+File::FileReadResult::operator bool() const { return success; }
 
 size_t File::get_file_size(const std::string &filename) {
     FILE *file = OPEN_FILE(filename, "rb");

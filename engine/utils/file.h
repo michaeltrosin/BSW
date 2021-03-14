@@ -11,12 +11,15 @@
 class File {
 public:
     struct FileReadResult {
+        bool success{false};
+
         char *data;
         size_t length;
         std::string filename;
 
         ~FileReadResult() { delete[] data; }
 
+        explicit operator bool() const;
         char &operator[](int) const;
     };
 
