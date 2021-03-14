@@ -108,8 +108,6 @@ add_library(${ENGINE}
         engine/core/input/input.h
         engine/core/input/input.cpp
         engine/math/mathf.cpp
-        engine/core/render/texture/texture_atlas.cpp
-        engine/core/render/texture/texture_atlas.h
         engine/core/assets/asset_manager.cpp
         engine/core/assets/asset_manager.h
         engine/utils/logging.h)
