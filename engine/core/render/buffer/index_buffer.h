@@ -12,9 +12,20 @@ public:
     IndexBuffer(uint32_t *indices, uint32_t count);
     ~IndexBuffer();
 
+    /**
+     * Binds the buffer
+     */
     void bind() const;
+
+    /**
+     * Unbinds the buffer
+     */
     void unbind() const;
 
+    /**
+     * Gets the element count
+     * @return
+     */
     uint32_t get_count() const { return m_count; }
 
 private:

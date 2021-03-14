@@ -15,12 +15,33 @@ public:
     VertexBuffer(float *vertices, uint32_t size);
     ~VertexBuffer();
 
+    /**
+     * Binds the buffer
+     */
     void bind() const;
+
+    /**
+     * Unbinds the buffer
+     */
     void unbind() const;
 
+    /**
+     * Sets the buffer data
+     * @param data
+     * @param size
+     */
     void set_data(const void *data, uint32_t size) const;
 
+    /**
+     * Gets the Bufferlayout
+     * @return
+     */
     const BufferLayout &get_layout() const { return m_layout; }
+
+    /**
+     * Sets the buffer Layout
+     * @param layout
+     */
     void set_layout(const BufferLayout &layout) { m_layout = layout; }
 
 private:

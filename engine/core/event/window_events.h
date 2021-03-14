@@ -12,7 +12,16 @@ class WindowResizeEvent : public Event {
 public:
     WindowResizeEvent(uint32_t width, uint32_t height) : m_width(width), m_height(height) {}
 
+    /**
+     * Gets the window width
+     * @return
+     */
     uint32_t get_width() const { return m_width; }
+
+    /**
+     * Gets the window height
+     * @return
+     */
     uint32_t get_height() const { return m_height; }
 
     EVENT_TYPE(WINDOW_RESIZED)

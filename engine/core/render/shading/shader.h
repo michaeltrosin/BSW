@@ -23,6 +23,8 @@ class Shader;
 
 class ShaderStruct {
 public:
+    friend Shader;
+
     union Value {
         bool bval;
         int ival;
@@ -35,10 +37,18 @@ public:
         glm::mat4 mat_4_val;
     };
 
-    friend Shader;
-
+    /**
+     * Constructs a new ShaderStruct of template Data
+     * @param template_data
+     * @return
+     */
     static ShaderStruct construct(const std::unordered_map<std::string, uint32_t> &template_data);
 
+    /**
+     * Returns true if a element with a name exists
+     * @param name
+     * @return
+     */
     bool exists(const std::string &name);
 
     void set(const std::string &name, int value);
@@ -65,11 +75,27 @@ public:
     //    Shader(std::string name, const std::string &vertex_file, const std::string &fragment_file);
     ~Shader();
 
+    /**
+     * Binds the Shader
+     */
     void bind() const;
+
+    /**
+     * Unbinds the Shader
+     */
     void unbind() const;
 
+    /**
+     * Returns the shader name
+     * @return
+     */
     const std::string &get_name() const { return m_name; }
 
+    /**
+     * Sets a Shader Struct
+     * @param name
+     * @param shader_struct
+     */
     void set_struct(const std::string &name, const ShaderStruct &shader_struct);
 
     void set_int(const std::string &name, int value);
@@ -86,9 +112,28 @@ public:
     void set_mat_4(const std::string &name, const glm::mat4 &matrix);
 
 private:
+    /**
+     * Compiles the shader from vertex and fragment sources
+     * @param vertex_src
+     * @param fragment_src
+     */
     void compile(const char *vertex_src, const char *fragment_src);
+
+    /**
+     * Compiles a single shader source with a given type
+     *
+     * @param src
+     * @param type
+     * @param compile_status will return true if compiled successfully
+     * @return
+     */
     uint32_t compile_shader_source(const char *src, uint32_t type, bool &compile_status) const;
 
+    /**
+     * Gets a uniform location from a given name
+     * @param name
+     * @return
+     */
     int get_uniform_location(const std::string &name);
 
     std::unordered_map<std::string, uint32_t> m_uniform_location_cache;

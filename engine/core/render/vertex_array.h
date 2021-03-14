@@ -16,13 +16,38 @@ public:
     VertexArray();
     ~VertexArray();
 
+    /**
+     * Binds the array
+     */
     void bind() const;
+
+    /**
+     * Unbinds the array
+     */
     void unbind() const;
 
+    /**
+     * Adds a vertex buffer
+     * @param vertex_buffer
+     */
     void add_vertex_buffer(const Ref<VertexBuffer> &vertex_buffer);
+
+    /**
+     * Sets the index buffer
+     * @param index_buffer
+     */
     void set_index_buffer(const Ref<IndexBuffer> &index_buffer);
 
+    /**
+     * Get the vertex buffers
+     * @return
+     */
     const std::vector<Ref<VertexBuffer>> &get_vertex_buffers() const { return m_vertex_buffers; }
+
+    /**
+     * Gets the index buffer
+     * @return
+     */
     const Ref<bsw::IndexBuffer> &get_index_buffer() const { return m_index_buffer; }
 
 private:

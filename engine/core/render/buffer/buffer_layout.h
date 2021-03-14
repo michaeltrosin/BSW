@@ -10,8 +10,13 @@
 #include <vector>
 
 namespace bsw {
-enum class ShaderDataType { NONE = 0, FLOAT, FLOAT_2, FLOAT_3, FLOAT_4, MAT_3, MAT_4, INT, INT_2, INT_3, INT_4, BOOL };
+enum class ShaderDataType : uint32_t { NONE = 0, FLOAT, FLOAT_2, FLOAT_3, FLOAT_4, MAT_3, MAT_4, INT, INT_2, INT_3, INT_4, BOOL };
 
+/**
+ * Parses a ShaderDataType to the type size
+ * @param type
+ * @return
+ */
 static uint32_t shader_data_type_size(ShaderDataType type) {
     switch (type) {
         case ShaderDataType::FLOAT: return 4;
@@ -42,6 +47,10 @@ struct BufferElement {
     BufferElement(ShaderDataType type, std::string name, bool normalized = false)
         : name(std::move(name)), type(type), size(shader_data_type_size(type)), offset(0), normalized(normalized) {}
 
+    /**
+     * Gets the component count of the current Element
+     * @return
+     */
     uint32_t get_component_count() const {
         switch (type) {
             case ShaderDataType::FLOAT: return 1;
@@ -69,7 +78,16 @@ public:
 
     BufferLayout(std::initializer_list<BufferElement> elements) : m_elements(elements) { calculate_offsets_and_stride(); }
 
+    /**
+     * Gets the stride
+     * @return
+     */
     uint32_t get_stride() const { return m_stride; }
+
+    /**
+     * Gets all elements
+     * @return
+     */
     const std::vector<BufferElement> &get_elements() const { return m_elements; }
 
     std::vector<BufferElement>::iterator begin() { return m_elements.begin(); }
@@ -78,6 +96,9 @@ public:
     std::vector<BufferElement>::const_iterator end() const { return m_elements.end(); }
 
 private:
+    /**
+     * Calculates all offsets and strides of all elements
+     */
     void calculate_offsets_and_stride() {
         size_t offset = 0;
         m_stride = 0;

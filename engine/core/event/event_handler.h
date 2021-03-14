@@ -16,8 +16,18 @@ class EventHandler {
     using CallbackFunction = std::function<void(T &)>;
 
 public:
+    /**
+     * Using this operator, a callback function will be appended to this handler
+     *
+     * @param callback_function
+     * @return
+     */
     EventHandler &operator+=(const CallbackFunction &callback_function);
 
+    /**
+     * Calls the event
+     * @param event
+     */
     void operator()(T &event);
 
 private:

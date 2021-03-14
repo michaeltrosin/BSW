@@ -22,8 +22,15 @@ protected:
 
     explicit Animation(Ref<Texture2D> textures[], uint32_t index_count, float max_delta);
 
+    /**
+     * Updates the current animation
+     * @param delta
+     */
     void update(float delta);
 
+    /**
+     * Resets the animation index
+     */
     void reset();
 
 public:
@@ -63,18 +70,53 @@ public:
         std::vector<AnimationsListElement> animations;
     };
 
+    /**
+     * Adds a new animation the handler
+     * @param name
+     * @param textures
+     * @param fps
+     */
     void add_animation(const std::string &name, Ref<Texture2D> textures[], uint32_t fps);
 
+    /**
+     * Returns the current animation texture
+     * @return
+     */
     operator Ref<Texture2D>();// NOLINT(google-explicit-constructor)
 
+    /**
+     * Updates the animation handler
+     * @param delta_time
+     */
     void update(float delta_time) const;
 
+    /**
+     * Starts a animation with a given name
+     * @param animation_name
+     * @param index
+     */
     void start_animation(std::string &animation_name, uint32_t index = 0);
+
+    /**
+     * Continues the current paused animation
+     */
     void continue_animation();
+
+    /**
+     * Pauses the current animation
+     */
     void pause_animation();
+
+    /**
+     * Stops the current animation
+     */
     void stop_animation();
 
 private:
+    /**
+     * Parses a given animation file
+     * @param file_name
+     */
     void parse_animation_file(const std::string &file_name);
 
 private:

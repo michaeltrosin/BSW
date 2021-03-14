@@ -32,12 +32,36 @@ public:
     Renderer2D() = default;
     ~Renderer2D() = default;
 
+    /**
+     * Initializes the Renderer
+     */
     static void init();
+
+    /**
+     * Destroys the Renderer
+     */
     static void shutdown();
+
+    /**
+     * Sets the Drawing anchor position
+     * @param anchor_position
+     */
     static void set_anchor_position(uint32_t anchor_position);
 
+    /**
+     * Begins the batch rendering
+     * @param view_projection
+     */
     static void begin(const glm::mat4 &view_projection);
+
+    /**
+     * Ends the batch rendering
+     */
     static void end();
+
+    /**
+     * Draws the current Batch and starts the next one
+     */
     static void flush();
 
     struct Statistics {
@@ -90,7 +114,14 @@ public:
     static void draw_centered_string(const std::string &text, const glm::vec3 &position, const Font &font, const Color &text_color = glm::vec4(1.0f));
 
 private:
+    /**
+     * Starts the batch
+     */
     static void start_batch();
+
+    /**
+     * Flushes the current and starts a new one
+     */
     static void next_batch();
 
     static glm::vec3 perform_origin_transform(const glm::vec3 &position, const glm::vec2 &size, uint32_t anchor_position);

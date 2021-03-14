@@ -32,11 +32,37 @@ public:
 
     explicit Font(const std::string &file_path, uint32_t font_size = 24);
 
+    /**
+     * Gets the font metrics from a character
+     * @param character
+     * @return
+     */
     FontGlyphMetrics &get_font_data(char character) const;
+
+    /**
+     * Gets the atlas texture
+     * @return
+     */
     const Ref<bsw::Texture2D> &get_atlas() const;
 
+    /**
+     * Gets the font size
+     * @return
+     */
     uint32_t get_font_size() const;
+
+    /**
+     * Gets the width of a given string
+     * @param text
+     * @return
+     */
     uint32_t get_string_width(const std::string &text) const;
+
+    /**
+     * Gets the height of a given string
+     * @param text
+     * @return
+     */
     uint32_t get_string_height(const std::string &text) const;
 
 private:

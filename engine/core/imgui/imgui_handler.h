@@ -13,9 +13,25 @@ class ImGuiHandler {
 public:
     explicit ImGuiHandler(GLFWwindow *window);
 
+    /**
+     * Initializes the im gui handler with a given version
+     * @param glsl_version
+     */
     void initialize_im_gui(char *glsl_version);
+
+    /**
+     * Begins the IMGUI drawing
+     */
     void begin();
+
+    /**
+     * Ends the IMGUI drawing
+     */
     void end();
+
+    /**
+     * Resets all created IMGUI functions and definitions
+     */
     void shutdown();
 
 private:

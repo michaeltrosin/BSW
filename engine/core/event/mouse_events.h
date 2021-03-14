@@ -14,7 +14,16 @@ class MouseMovedEvent : public Event {
 public:
     MouseMovedEvent(const float mouse_x, const float mouse_y) : m_mouse_x(mouse_x), m_mouse_y(mouse_y) {}
 
+    /**
+     * Gets the x position of the mouse
+     * @return
+     */
     float get_x() const { return m_mouse_x; }
+
+    /**
+     * Gets the y position of the mouse
+     * @return
+     */
     float get_y() const { return m_mouse_y; }
 
     EVENT_CATEGORY(EventCategory::MOUSE | EventCategory::INPUT)
@@ -29,7 +38,16 @@ class MouseScrolledEvent : public Event {
 public:
     MouseScrolledEvent(const float x_offset, const float y_offset) : m_x_offset(x_offset), m_y_offset(y_offset) {}
 
+    /**
+     * Gets the scrolled x offset
+     * @return
+     */
     float get_x_offset() const { return m_x_offset; }
+
+    /**
+     * Gets the scrolled y offset
+     * @return
+     */
     float get_y_offset() const { return m_y_offset; }
 
     EVENT_TYPE(MOUSE_SCROLLED)
@@ -40,9 +58,22 @@ private:
 
 class MouseButtonEvent : public Event {
 public:
+    /**
+     * Gets the mouse button
+     * @return
+     */
     MouseCode get_mouse_button() const { return m_button; }
 
+    /**
+     * Gets the x position of the mouse
+     * @return
+     */
     float get_mouse_x() const { return m_mouse_x; }
+
+    /**
+     * Gets the y position of the mouse
+     * @return
+     */
     float get_mouse_y() const { return m_mouse_y; }
 
     EVENT_CATEGORY(EventCategory::MOUSE | EventCategory::INPUT | EventCategory::MOUSE_BUTTON)

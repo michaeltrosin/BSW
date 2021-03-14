@@ -22,9 +22,23 @@ public:
         NUM_LOCK = BIT(5),
     };
 
+    /**
+     * Returns the keycode of the event
+     * @return
+     */
     KeyCode get_key_code() const { return m_key_code; }
+
+    /**
+     * Returns the modifiers of the event
+     * @return
+     */
     Modifier get_modifiers() const { return m_mods; }
 
+    /**
+     * Returns true if the modifiers contains mod
+     * @param mod
+     * @return
+     */
     bool has_modifier(Modifier mod) const { return get_modifiers() == mod; }
 
     EVENT_CATEGORY(EventCategory::KEYBOARD | EventCategory::INPUT)
@@ -43,6 +57,10 @@ public:
     explicit KeyPressedEvent(const KeyCode keycode, const uint32_t mods, const uint32_t repeat_count = 0)
         : KeyEvent(keycode, mods), m_repeat_count(repeat_count) {}
 
+    /**
+     * Gets the repeat count of the pressed event
+     * @return
+     */
     uint32_t get_repeat_count() const { return m_repeat_count; }
 
     EVENT_TYPE(KEY_PRESSED)
