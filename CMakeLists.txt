@@ -114,8 +114,8 @@ add_library(${ENGINE}
         engine/core/assets/asset_manager.cpp
         engine/core/assets/asset_manager.h
         engine/utils/logging.h
-        engine/core/render/texture/animation_handler.cpp
-        engine/core/render/texture/animation_handler.h
+        engine/core/render/animation/animation_handler.cpp
+        engine/core/render/animation/animation_handler.h
         )
 
 include_directories(engine)

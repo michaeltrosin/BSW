@@ -435,6 +435,6 @@ glm::vec3 bsw::Renderer2D::perform_origin_transform(const glm::vec3 &position, c
         return {position.x - half_x, position.y - half_y, position.z};
     }
 
-    ERROR("Invalid Anchor Position! %d\n", data.anchor_position);
+    LOGERROR("Invalid Anchor Position! %d", data.anchor_position);
     return position;
 }
