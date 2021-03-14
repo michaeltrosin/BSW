@@ -1,11 +1,13 @@
 ### Naming convention for resource files
 
-| Filetype          | Fileextension |
-|:-----------------:|:-------------:|
-| Basic Texture     | *.png, *.jpg  |
-| Texture Atlas     | *.atlas       |
-| Animation         | *.atlas.anim  |
-| Animation Details | *.anim        |
-| Vertex Shader     | *.vert        |
-| Fragment Shader   | *.frag        |
+|     Filetype      | Fileextension |
+| :---------------: | :-----------: |
+|   Basic Texture   |    \*.png     |
+|       _-"-_       |    \*.jpg     |
+|   Texture Atlas   |   \*.atlas    |
+|     AnimationHandler     |    \*.anim    |
+|   Vertex Shader   |    \*.vert    |
+|  Fragment Shader  |    \*.frag    |
+
+---
 

@@ -32,6 +32,7 @@ target_link_libraries(${UILIB} ${ENGINE})
 add_library(${ENGINE}
         ${DEP_FOLDER}/glad/src/glad.c
 
+        ${DEP_FOLDER}/include/vendor/nlohmann/json.hpp
         ${DEP_FOLDER}/include/vendor/stb_image/stb_image.h
         ${DEP_FOLDER}/include/vendor/stb_image/stb_image.cpp
         ${DEP_FOLDER}/include/vendor/imgui/imconfig.h
@@ -116,6 +117,7 @@ add_library(${ENGINE}
 include_directories(engine)
 include_directories(uilib)
 include_directories(${DEP_FOLDER}/include/vendor)
+include_directories(${DEP_FOLDER}/include/vendor/nlohmann)
 
 include_directories(${DEP_FOLDER}/glad/include)
 set_target_properties(${ENGINE} PROPERTIES LINKER_LANGUAGE CXX)
@@ -130,6 +132,7 @@ include_directories(${DEP_FOLDER}/freetype-2.10.4/include)
 find_package(OpenGL REQUIRED)
 include_directories(${OPENGL_INCLUDE_DIR})
 target_link_libraries(${ENGINE} opengl32 glfw freetype)
+
 
 #
 #   Copy resource folder to output
