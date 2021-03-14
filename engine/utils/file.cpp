@@ -5,6 +5,7 @@
 #include "file.h"
 
 #include <cstdio>
+#include <utils/logging.h>
 #include <utils/macros.h>
 
 #define OPEN_FILE(name, data) fopen((name).c_str(), data)
@@ -66,7 +67,7 @@ void File::write_all_binary(const std::string &filename, const uint8_t *buffer, 
 void File::cleanup_temp_files() {
     for (auto &filename : m_temp_files) {
         int result = remove(filename.c_str());
-        if (result != 0) { printf("Could not delete %s\n", filename.c_str()); }
+        if (result != 0) { LOGERROR("Could not delete %s", filename.c_str()); }
     }
 }
 

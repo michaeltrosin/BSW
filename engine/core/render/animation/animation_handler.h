@@ -22,7 +22,6 @@ protected:
 
     explicit Animation(Ref<Texture2D> textures[], uint32_t index_count, float max_delta);
 
-    void bind_current(uint32_t slot);
     void update(float delta);
 
     void reset();
@@ -40,14 +39,34 @@ private:
     Ref<Texture2D> *m_textures;
 };
 
-class AnimationHandler : public Texture2D {
+class AnimationHandler {
 public:
-    explicit AnimationHandler(const std::string &file_name);
-    ~AnimationHandler() override;
+    explicit AnimationHandler(const std::string &resource_path);
+    ~AnimationHandler();
+
+    struct AnimationFrameElement {
+        int x;
+        int y;
+        int w;
+        int h;
+    };
+
+    struct AnimationsListElement {
+        std::string name;
+        std::vector<AnimationFrameElement> frames;
+    };
+
+    struct AnimationData {
+        uint32_t fps;
+        std::string atlas;
+
+        std::vector<AnimationsListElement> animations;
+    };
 
     void add_animation(const std::string &name, Ref<Texture2D> textures[], uint32_t fps);
 
-    void bind(uint32_t slot) const override;
+    operator Ref<Texture2D>();// NOLINT(google-explicit-constructor)
+
     void update(float delta_time) const;
 
     void start_animation(std::string &animation_name, uint32_t index = 0);
@@ -59,6 +78,8 @@ private:
     void parse_animation_file(const std::string &file_name);
 
 private:
+    Ref<Texture2D> m_texture_atlas;
+
     Ref<Animation> m_current_animation;
     const char *m_current_animation_name;
 

@@ -35,8 +35,6 @@ void bsw::Shader::compile(const char *vertex_src, const char *fragment_src) {
     // TODO: Optimize shader linking
     GLuint program = glCreateProgram();
 
-    std::printf("%s\n", fragment_src);
-
     bool status_vert;
     bool status_frag;
     GLuint vertex = compile_shader_source(vertex_src, GL_VERTEX_SHADER, status_vert);
