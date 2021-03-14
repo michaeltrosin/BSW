@@ -3,6 +3,38 @@
 //
 #pragma once
 
+#ifdef _WIN64
+#define PLATFORM_WIN
+#define PLATFORM_64
+#define FILEFORMAT_CRLF
+#elif _WIN32
+#define PLATFORM_WIN
+#define PLATFORM_32
+#define FILEFORMAT_CRLF
+
+#elif __APPLE__
+#include "TargetConditionals.h"
+#if TARGET_OS_IPHONE && TARGET_IPHONE_SIMULATOR
+// define something for simulator
+#error "NOT SUPPORTED"
+#elif TARGET_OS_IPHONE
+// define something for iphone
+#error "NOT SUPPORTED"
+#else
+#define TARGET_OS_OSX 1
+// define something for OSX
+#error "NOT SUPPORTED"
+#endif
+#elif __linux
+// linux
+#error "NOT SUPPORTED"
+#elif __unix// all unices not caught above
+// Unix
+#error "NOT SUPPORTED"
+#elif __posix
+#error "NOT SUPPORTED"
+#endif
+
 #define BIT(x) (1 << (x))
 
 #define ARRAY_SIZE(arr) ((int) (sizeof(arr) / sizeof(*(arr)))

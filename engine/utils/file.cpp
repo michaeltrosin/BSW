@@ -5,6 +5,7 @@
 #include "file.h"
 
 #include <cstdio>
+#include <utils/macros.h>
 
 #define OPEN_FILE(name, data) fopen((name).c_str(), data)
 
@@ -19,8 +20,12 @@ File::FileReadResult File::read_all(const std::string &filename) {
     int index = 0;
     int c;
     while ((c = fgetc(file)) != EOF) {
-        buffer[index] = (char) c;
-        index++;
+
+#if defined(PLATFORM_WIN) && defined(FILEFORMAT_CRLF)
+        if (c == '\n') { buffer[index++] = '\r'; }
+#endif
+
+        buffer[index++] = (char) c;
     }
     buffer[file_length] = '\0';
 
