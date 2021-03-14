@@ -18,7 +18,10 @@ add_executable(${SANDBOX}
         sandbox/main.cpp
         sandbox/screens/test2d.cpp
         sandbox/screens/test2d.h
-        "sandbox/test platformer/platformer.cpp" "sandbox/test platformer/platformer.h" "sandbox/test platformer/player.cpp" "sandbox/test platformer/player.h")
+        "sandbox/test platformer/platformer.cpp"
+        "sandbox/test platformer/platformer.h"
+        "sandbox/test platformer/player.cpp"
+        "sandbox/test platformer/player.h")
 
 target_link_libraries(${SANDBOX} ${ENGINE}
         ${UILIB}
@@ -110,7 +113,10 @@ add_library(${ENGINE}
         engine/math/mathf.cpp
         engine/core/assets/asset_manager.cpp
         engine/core/assets/asset_manager.h
-        engine/utils/logging.h)
+        engine/utils/logging.h
+        engine/core/render/texture/animation_handler.cpp
+        engine/core/render/texture/animation_handler.h
+        )
 
 include_directories(engine)
 include_directories(uilib)

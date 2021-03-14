@@ -11,3 +11,32 @@
 
 ---
 
+### AnimationHandler File Example:
+
+```json
+{
+  "fps": 2,
+  "atlas": "animation.atlas",
+  "animations": [
+    {
+      "name": "idle",
+      "frames": [
+        {
+          "x": 0,
+          "y": 0,
+          "w": 32,
+          "h": 32
+        },
+        {
+          "x": 32,
+          "y": 32,
+          "w": 32,
+          "h": 32
+        }
+      ]
+    }
+  ]
+}
+```
+
+---
