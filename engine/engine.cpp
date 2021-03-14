@@ -7,10 +7,11 @@
 #include <bsw.h>
 #include <core/font/font_manager.h>
 #include <core/render/gl_render.h>
+#include <core/render/renderer2d.h>
 
 Single<bsw::Engine> bsw::Engine::m_instance;
 
-bsw::Engine &bsw::Engine::create(const WindowProps &props, const char** argv) {
+bsw::Engine &bsw::Engine::create(const WindowProps &props, const char **argv) {
     Engine::m_instance = create_single<Engine>();
     AssetManager::init(argv[0]);
 
@@ -18,7 +19,6 @@ bsw::Engine &bsw::Engine::create(const WindowProps &props, const char** argv) {
     Engine::m_instance->initialize();
 
     Engine::m_instance->m_screen_handler = create_single<ScreenHandler>();
-
 
     return *Engine::m_instance;
 }

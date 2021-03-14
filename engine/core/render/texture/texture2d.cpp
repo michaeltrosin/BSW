@@ -71,7 +71,7 @@ void bsw::Texture2D::set_sub_data(void *data, uint32_t size, const glm::vec2 &of
                         GL_UNSIGNED_BYTE, data);
 }
 
-void bsw::Texture2D::bind(uint32_t slot = 0) const { glBindTextureUnit(slot, m_texture_id); }
-void bsw::Texture2D::unbind(uint32_t slot = 0) const { glBindTextureUnit(slot, 0); }
+void bsw::Texture2D::bind(uint32_t slot) const { glBindTextureUnit(slot, m_texture_id); }
+void bsw::Texture2D::unbind(uint32_t slot) const { glBindTextureUnit(slot, 0); }
 uint32_t bsw::Texture2D::get_width() const { return m_width; }
 uint32_t bsw::Texture2D::get_height() const { return m_height; }

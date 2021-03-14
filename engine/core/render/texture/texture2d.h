@@ -22,8 +22,8 @@ public:
     void set_data(void *data, uint32_t size) const;
     void set_sub_data(void *data, uint32_t size, const glm::vec2 &offset, const glm::vec2 &txsize) const;
 
-    void bind(uint32_t slot) const;
-    void unbind(uint32_t slot) const;
+    virtual void bind(uint32_t slot) const;
+    void unbind(uint32_t slot = 0) const;
 
     void set_width(uint32_t width) { m_width = width; }
     void set_height(uint32_t height) { m_height = height; }
