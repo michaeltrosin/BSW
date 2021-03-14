@@ -6,6 +6,8 @@
 
 #include <stb_image/stb_image.h>
 
+bsw::Texture2D::Texture2D() = default;
+
 bsw::Texture2D::Texture2D(const std::string &path) {
     int width, height, channels;
     stbi_set_flip_vertically_on_load(1);
@@ -75,3 +77,4 @@ void bsw::Texture2D::bind(uint32_t slot) const { glBindTextureUnit(slot, m_textu
 void bsw::Texture2D::unbind(uint32_t slot) const { glBindTextureUnit(slot, 0); }
 uint32_t bsw::Texture2D::get_width() const { return m_width; }
 uint32_t bsw::Texture2D::get_height() const { return m_height; }
+
