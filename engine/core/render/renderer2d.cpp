@@ -8,6 +8,8 @@
 #include <core/render/gl_render.h>
 #include <core/render/shading/shader.h>
 
+#include <core/assets/resource_manager.h>
+#include <core/render/texture/texture_generator.h>
 #include <glm/gtc/matrix_transform.hpp>
 
 const uint32_t AnchorTL = (uint32_t)(bsw::AnchorPosition::TOP | bsw::AnchorPosition::LEFT);
@@ -92,7 +94,7 @@ void bsw::Renderer2D::init() {
     int32_t samplers[Renderer2DData::max_texture_slots];
     for (uint32_t i = 0; i < Renderer2DData::max_texture_slots; i++) samplers[i] = i;
 
-    data.texture_shader = create_ref<Shader>("shader/basic");
+    data.texture_shader = ResourceManager::load_shader("shader/basic");
 
     data.texture_shader->bind();
 
@@ -103,6 +105,8 @@ void bsw::Renderer2D::init() {
     data.quad_vertex_positions[1] = {0.5f, -0.5f, 0.0f, 1.0f};
     data.quad_vertex_positions[2] = {0.5f, 0.5f, 0.0f, 1.0f};
     data.quad_vertex_positions[3] = {-0.5f, 0.5f, 0.0f, 1.0f};
+
+    Texture2D::unknown_texture = TextureGenerator::generate_unknown_texture();
 }
 
 void bsw::Renderer2D::shutdown() { delete[] data.quad_vertex_buffer_base; }

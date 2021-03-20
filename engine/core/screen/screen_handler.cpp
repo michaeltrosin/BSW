@@ -6,7 +6,7 @@
 
 #include <core/event/event.h>
 
-bsw::ScreenHandler::ScreenHandler() { m_screen_stack = create_single<ScreenStack>(); }
+bsw::ScreenHandler::ScreenHandler() { m_screen_stack = create_scoped<ScreenStack>(); }
 
 void bsw::ScreenHandler::switch_screen(const std::string &name) {
     if (m_current_screen) m_current_screen->on_close();

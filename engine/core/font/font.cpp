@@ -24,7 +24,6 @@ bsw::Font::FontGlyphMetrics &bsw::Font::get_font_data(char character) const { re
 const Ref<bsw::Texture2D> &bsw::Font::get_atlas() const { return m_atlas; }
 
 void bsw::Font::generate_atlas() {
-
     uint32_t atlas_width = 0;
     uint32_t atlas_height = 0;
 

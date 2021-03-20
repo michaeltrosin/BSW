@@ -9,10 +9,26 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17")
 #TODO: Remove on release build!!
 add_compile_definitions(BUILD_DEBUG)
 
-set(ENGINE BSWCore)
-set(UILIB BSWUI)
+set(ENGINE EngineCore)
 set(SANDBOX Sandbox)
-# set(AUDIO AudioEngine)
+
+set(UTILS Utils)
+set(MATH Math)
+
+add_library(${UTILS}
+        utils/utils/file.h
+        utils/utils/file.cpp
+        utils/utils/logging.h
+        utils/utils/macros.h
+        utils/utils/assertion.h
+        )
+
+add_library(${MATH}
+        math/math/mathf.h
+        math/math/mathf.cpp
+        math/math/color.h
+        math/math/color.cpp
+        )
 
 add_executable(${SANDBOX}
         sandbox/main.cpp
@@ -23,14 +39,7 @@ add_executable(${SANDBOX}
         "sandbox/test platformer/player.cpp"
         "sandbox/test platformer/player.h")
 
-target_link_libraries(${SANDBOX} ${ENGINE}
-        ${UILIB}
-        )
-
-# add_library(${AUDIO})
-add_library(${UILIB} uilib/ui_button.cpp uilib/ui_button.h)
-target_link_libraries(${UILIB} ${ENGINE})
-
+target_link_libraries(${SANDBOX} ${ENGINE})
 # Builds Engine as a library
 add_library(${ENGINE}
         ${DEP_FOLDER}/glad/src/glad.c
@@ -57,15 +66,6 @@ add_library(${ENGINE}
         engine/engine.cpp
         engine/engine.h
         engine/bsw.h
-
-        engine/utils/imgui_utils.cpp
-        engine/utils/imgui_utils.h
-        engine/utils/file.h
-        engine/utils/file.cpp
-        engine/utils/timing.h
-        engine/utils/macros.h
-        engine/math/mathf.h
-        engine/utils/assertion.h
 
         engine/core/window/window.h
         engine/core/window/window.cpp
@@ -97,29 +97,32 @@ add_library(${ENGINE}
         engine/core/render/buffer/buffer_layout.h
         engine/core/render/vertex_array.cpp
         engine/core/render/vertex_array.h
-        engine/core/render/texture/texture2d.cpp
-        engine/core/render/texture/texture2d.h
+        engine/core/texture/texture2d.cpp
+        engine/core/texture/texture2d.h
         engine/core/render/gl_render.cpp
         engine/core/render/gl_render.h
         engine/core/font/font.cpp
         engine/core/font/font.h
         engine/core/font/font_manager.cpp
         engine/core/font/font_manager.h
-        engine/math/color.cpp
-        engine/math/color.h
         engine/core/render/camera/camera.h
         engine/core/input/input.h
         engine/core/input/input.cpp
-        engine/math/mathf.cpp
         engine/core/assets/asset_manager.cpp
         engine/core/assets/asset_manager.h
-        engine/utils/logging.h
-        engine/core/render/animation/animation_handler.cpp
-        engine/core/render/animation/animation_handler.h
+        engine/core/texture/texture_generator.cpp
+        engine/core/texture/texture_generator.h
+        engine/core/assets/resource_manager.cpp
+        engine/core/assets/resource_manager.h
         )
 
+target_link_libraries(${ENGINE} ${UTILS} ${MATH})
+
 include_directories(engine)
-include_directories(uilib)
+include_directories(math)
+include_directories(utils)
+# include_directories(network)
+
 include_directories(${DEP_FOLDER}/include/vendor)
 include_directories(${DEP_FOLDER}/include/vendor/nlohmann)
 

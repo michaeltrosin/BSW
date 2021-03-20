@@ -12,7 +12,7 @@
 #include <string>
 #include <unordered_map>
 
-#include "freetype/freetype.h"
+#include <freetype/freetype.h>
 #include FT_FREETYPE_H
 
 namespace bsw {

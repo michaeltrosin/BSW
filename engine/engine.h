@@ -59,16 +59,16 @@ public:
      * Gets the screenhandler instance
      * @return
      */
-    Single<ScreenHandler> &get_screen_handler() { return m_screen_handler; }
+    Scoped<ScreenHandler> &get_screen_handler() { return m_screen_handler; }
 
     /**
      * Gets the window handle
      * @return
      */
-    const Single<bsw::Window> &get_window_handle() const;
+    const Scoped<bsw::Window> &get_window_handle() const;
 
 private:
-    static Single<Engine> m_instance;
+    static Scoped<Engine> m_instance;
 
     /**
      * Will be called on every event
@@ -84,7 +84,7 @@ private:
 private:
     float m_fps_limit = 60.0f;
 
-    Single<ScreenHandler> m_screen_handler;
-    Single<Window> m_main_window;
+    Scoped<ScreenHandler> m_screen_handler;
+    Scoped<Window> m_main_window;
 };
 }// namespace bsw

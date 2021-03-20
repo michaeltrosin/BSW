@@ -4,6 +4,9 @@
 
 #include "mathf.h"
 
+long double mathf::operator""_to_deg(long double value) { return value * RAD_2_DEG; }
+long double mathf::operator""_to_rad(long double value) { return value * DEG_2_RAD; }
+
 double mathf::normalize(double value, double min, double max) { return (value - min) / (max - min); }
 
 double mathf::denormalize(double normalized, double min, double max) { return normalized * (max - min) + min; }
@@ -50,8 +53,8 @@ double mathf::move_towards(double current, double target, double max_delta) {
 }
 
 double mathf::delta_angle(double current, double target) {
-    double delta = repeat((target - current), 360.0F);
-    if (delta > 180.0F) delta -= 360.0F;
+    double delta = repeat((target - current), 360.0);
+    if (delta > 180.0) delta -= 360.0;
     return delta;
 }
 
@@ -65,5 +68,5 @@ double mathf::move_towards_angle(double current, double target, double max_delta
 double mathf::inverse_lerp(double a, double b, double value) {
     if (a != b) return clamp_01((value - a) / (b - a));
     else
-        return 0.0f;
+        return 0.0;
 }

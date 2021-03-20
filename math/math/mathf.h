@@ -7,26 +7,96 @@
 #include <functional>
 
 namespace mathf {
-#define PI = (double) M_PI
+#define PI M_PI
 
 /**
  * Degrees-to-radians conversion constant (RO).
  */
-#define DEG_2_RAD = (PI * 2.0 / 360.0)
+#define DEG_2_RAD (PI * 2.0 / 360.0)
 
 /**
  * Radians-to-degrees conversion constant (RO).
  */
-#define RAD_2_DEG = (1.0 / DEG_2_RAD)
+#define RAD_2_DEG (1.0 / DEG_2_RAD)
 
+long double operator""_to_deg(long double value);
+long double operator""_to_rad(long double value);
+
+/**
+ * Normalizes a given value between 0 and 1
+ * @param value
+ * @param min
+ * @param max
+ * @return
+ */
 double normalize(double value, double min, double max);
+
+/**
+ * Denormalizes a given value between 0 and 1 to any given min and max values
+ * @param normalized
+ * @param min
+ * @param max
+ * @return
+ */
 double denormalize(double normalized, double min, double max);
+
+/**
+ * Maps a value between min and max to a new value between new min and new max
+ * @param value
+ * @param old_min
+ * @param old_max
+ * @param new_min
+ * @param new_max
+ * @return
+ */
 double map(double value, double old_min, double old_max, double new_min, double new_max);
+
+/**
+ * Clamps a given value between min and max
+ * @param value
+ * @param min
+ * @param max
+ * @return
+ */
 double clamp(double value, double min, double max);
+
+/**
+ * Returns the greater value of two
+ * @param value_1
+ * @param value_2
+ * @return
+ */
 double max(double value_1, double value_2);
+
+/**
+ * Returns the smaller value of two
+ * @param value_1
+ * @param value_2
+ * @return
+ */
 double min(double value_1, double value_2);
+
+/**
+ * Returns true if a given value is between min and max
+ * @param value
+ * @param min
+ * @param max
+ * @return
+ */
 bool is_between(double value, double min, double max);
+
+/**
+ * Returns 1 if value is greater or equal to zero. Returns 0 otherwise
+ * @param f
+ * @return
+ */
 double sign(double f);
+
+/**
+ * Returns the absoulte positive value of a given value
+ * @param f
+ * @return
+ */
 double abs(double f);
 
 /**

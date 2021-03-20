@@ -12,7 +12,7 @@ void bsw::ScreenStack::pop(const std::string &name) {
     int index = index_of(name);
     if (index < 0) return;
 
-    m_screens.erase(m_screens.begin() + index_of(name));
+    m_screens.erase(m_screens.begin() + index);
 }
 
 Ref<bsw::Screen> bsw::ScreenStack::operator[](const std::string &name) {

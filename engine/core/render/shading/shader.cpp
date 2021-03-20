@@ -16,8 +16,8 @@ bsw::Shader::Shader(std::string filename) : m_name(std::move(filename)), m_progr
     std::string vert_path = std::string(m_name).append(".vert");
     std::string frag_path = std::string(m_name).append(".frag");
 
-    auto read_vert = AssetManager::read_all(vert_path);
-    auto read_frag = AssetManager::read_all(frag_path);
+    auto read_vert = File::read_all(vert_path);
+    auto read_frag = File::read_all(frag_path);
 
     const char *vert_data = read_vert.data;
     const char *frag_data = read_frag.data;

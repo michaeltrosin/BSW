@@ -9,16 +9,16 @@
 #include <core/render/gl_render.h>
 #include <core/render/renderer2d.h>
 
-Single<bsw::Engine> bsw::Engine::m_instance;
+Scoped<bsw::Engine> bsw::Engine::m_instance;
 
 bsw::Engine &bsw::Engine::create(const WindowProps &props, const char **argv) {
-    Engine::m_instance = create_single<Engine>();
+    Engine::m_instance = create_scoped<Engine>();
     AssetManager::init(argv[0]);
 
-    Engine::m_instance->m_main_window = create_single<Window>(props);
+    Engine::m_instance->m_main_window = create_scoped<Window>(props);
     Engine::m_instance->initialize();
 
-    Engine::m_instance->m_screen_handler = create_single<ScreenHandler>();
+    Engine::m_instance->m_screen_handler = create_scoped<ScreenHandler>();
 
     return *Engine::m_instance;
 }
@@ -113,4 +113,4 @@ int bsw::Engine::run() {
 
 float bsw::Engine::get_runtime() const { return (float) glfwGetTime(); }
 
-const Single<bsw::Window> &bsw::Engine::get_window_handle() const { return m_main_window; }
+const Scoped<bsw::Window> &bsw::Engine::get_window_handle() const { return m_main_window; }

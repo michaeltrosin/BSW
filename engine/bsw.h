@@ -13,13 +13,11 @@
 #include <cstdint>
 #include <memory>
 
-//BSW = Bitsch Succs Weiner
-
 template<typename T>
-using Single = std::unique_ptr<T>;
+using Scoped = std::unique_ptr<T>;
 
 /**
- * Creates a non copyable pointer
+ * Creates a scope based pointer
  *
  * @tparam T
  * @tparam Args
@@ -27,7 +25,7 @@ using Single = std::unique_ptr<T>;
  * @return
  */
 template<typename T, typename... Args>
-constexpr Single<T> create_single(Args &&...args) {
+constexpr Scoped<T> create_scoped(Args &&...args) {
     return std::make_unique<T>(std::forward<Args>(args)...);
 }
 
@@ -35,7 +33,7 @@ template<typename T>
 using Ref = std::shared_ptr<T>;
 
 /**
- * Creates a copyable ref counted pointer
+ * Creates a copyable reference counted pointer
  *
  * @tparam T
  * @tparam Args

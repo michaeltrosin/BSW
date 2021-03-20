@@ -69,6 +69,6 @@ private:
     void switch_screen(int index);
 
     Ref<Screen> m_current_screen{nullptr};
-    Single<ScreenStack> m_screen_stack;
+    Scoped<ScreenStack> m_screen_stack;
 };
 }// namespace bsw

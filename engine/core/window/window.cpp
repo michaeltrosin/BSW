@@ -113,7 +113,7 @@ bsw::Window::Window(const WindowProps &window_props) {
 }
 
 void bsw::Window::initialize() {
-    m_im_gui_handler = create_single<ImGuiHandler>(m_window);
+    m_im_gui_handler = create_scoped<ImGuiHandler>(m_window);
     m_im_gui_handler->initialize_im_gui((char *) glGetString(GL_NUM_SHADING_LANGUAGE_VERSIONS));
 
     std::cout << "OpenGL Info:" << std::endl;

@@ -69,7 +69,7 @@ public:
      * Gets the ImGuiHandler instance
      * @return
      */
-    Single<ImGuiHandler> &gui_handler() { return m_im_gui_handler; }
+    Scoped<ImGuiHandler> &gui_handler() { return m_im_gui_handler; }
 
     /**
      * Swaps the current frame buffers
@@ -133,7 +133,7 @@ public:
     void set_title(const std::string &title);
 
 private:
-    Single<ImGuiHandler> m_im_gui_handler;
+    Scoped<ImGuiHandler> m_im_gui_handler;
     GLFWwindow *m_window;
 
     struct WindowData {

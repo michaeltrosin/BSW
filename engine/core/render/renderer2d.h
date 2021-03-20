@@ -79,39 +79,39 @@ public:
     static void draw_quad(const glm::vec3 &position, const glm::vec2 &size, const Color &color);
 
     static void draw_quad(const glm::vec2 &position, const glm::vec2 &size, const Ref<Texture2D> &texture, glm::vec2 *texture_coords,
-                          float tiling_factor = 1.0f, const Color &tint_color = glm::vec4(1.0f));
+                          float tiling_factor = 1.0f, const Color &tint_color = Color(255));
     static void draw_quad(const glm::vec3 &position, const glm::vec2 &size, const Ref<Texture2D> &texture, glm::vec2 *texture_coords,
-                          float tiling_factor = 1.0f, const Color &tint_color = glm::vec4(1.0f));
+                          float tiling_factor = 1.0f, const Color &tint_color = Color(255));
     static void draw_quad(const glm::vec2 &position, const glm::vec2 &size, const Ref<Texture2D> &texture, float tiling_factor = 1.0f,
-                          const Color &tint_color = glm::vec4(1.0f));
+                          const Color &tint_color = Color(255));
     static void draw_quad(const glm::vec3 &position, const glm::vec2 &size, const Ref<Texture2D> &texture, float tiling_factor = 1.0f,
-                          const Color &tint_color = glm::vec4(1.0f));
+                          const Color &tint_color = Color(255));
 
     static void draw_quad(const glm::mat4 &transform, const Color &color);
     static void draw_quad(const glm::mat4 &transform, const Ref<Texture2D> &texture, float tiling_factor = 1.0f,
-                          const Color &tint_color = glm::vec4(1.0f));
+                          const Color &tint_color = Color(255));
     static void draw_quad(const glm::mat4 &transform, const Ref<Texture2D> &texture, glm::vec2 *tex_coords, float tiling_factor = 1.0f,
-                          const Color &tint_color = glm::vec4(1.0f));
+                          const Color &tint_color = Color(255));
 
     static void draw_sub_quad(const glm::vec2 &position, const glm::vec2 &size, const Ref<Texture2D> &texture, const glm::vec2 &cut_offset,
-                              const glm::vec2 &cut_size, float tiling_factor = 1.0f, const Color &tint_color = glm::vec4(1.0f));
+                              const glm::vec2 &cut_size, float tiling_factor = 1.0f, const Color &tint_color = Color(255));
     static void draw_sub_quad(const glm::vec3 &position, const glm::vec2 &size, const Ref<Texture2D> &texture, const glm::vec2 &cut_offset,
-                              const glm::vec2 &cut_size, float tiling_factor = 1.0f, const Color &tint_color = glm::vec4(1.0f));
+                              const glm::vec2 &cut_size, float tiling_factor = 1.0f, const Color &tint_color = Color(255));
     static void draw_sub_quad(const glm::mat4 &transform, const Ref<Texture2D> &texture, const glm::vec2 &cut_offset, const glm::vec2 &cut_size,
-                              float tiling_factor = 1.0f, const Color &tint_color = glm::vec4(1.0f));
+                              float tiling_factor = 1.0f, const Color &tint_color = Color(255));
 
     static void draw_rotated_quad(const glm::vec2 &position, const glm::vec2 &size, float rotation, const Color &color);
     static void draw_rotated_quad(const glm::vec3 &position, const glm::vec2 &size, float rotation, const Color &color);
     static void draw_rotated_quad(const glm::vec2 &position, const glm::vec2 &size, float rotation, const Ref<Texture2D> &texture,
-                                  float tiling_factor = 1.0f, const Color &tint_color = glm::vec4(1.0f));
+                                  float tiling_factor = 1.0f, const Color &tint_color = Color(255));
     static void draw_rotated_quad(const glm::vec3 &position, const glm::vec2 &size, float rotation, const Ref<Texture2D> &texture,
-                                  float tiling_factor = 1.0f, const Color &tint_color = glm::vec4(1.0f));
+                                  float tiling_factor = 1.0f, const Color &tint_color = Color(255));
 
     //TODO: Add dynamic fontsize
-    static void draw_string(const std::string &text, const glm::vec2 &position, const Font &font, const Color &text_color = glm::vec4(1.0f));
-    static void draw_string(const std::string &text, const glm::vec3 &position, const Font &font, const Color &text_color = glm::vec4(1.0f));
-    static void draw_centered_string(const std::string &text, const glm::vec2 &position, const Font &font, const Color &text_color = glm::vec4(1.0f));
-    static void draw_centered_string(const std::string &text, const glm::vec3 &position, const Font &font, const Color &text_color = glm::vec4(1.0f));
+    static void draw_string(const std::string &text, const glm::vec2 &position, const Font &font, const Color &text_color = Color(255));
+    static void draw_string(const std::string &text, const glm::vec3 &position, const Font &font, const Color &text_color = Color(255));
+    static void draw_centered_string(const std::string &text, const glm::vec2 &position, const Font &font, const Color &text_color = Color(255));
+    static void draw_centered_string(const std::string &text, const glm::vec3 &position, const Font &font, const Color &text_color = Color(255));
 
 private:
     /**

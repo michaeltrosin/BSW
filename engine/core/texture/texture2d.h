@@ -15,10 +15,14 @@
 namespace bsw {
 class Texture2D {
 public:
+    static Ref<Texture2D> unknown_texture;
+
     Texture2D();
     explicit Texture2D(const std::string &path);
-    Texture2D(const std::string &path, uint32_t offx, uint32_t offy, uint32_t widht, uint32_t height);
+
+    Texture2D(const std::string &path, uint32_t offx, uint32_t offy, uint32_t width, uint32_t height);
     Texture2D(uint32_t width, uint32_t height);
+
     virtual ~Texture2D();
 
     /**

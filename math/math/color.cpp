@@ -4,7 +4,7 @@
 
 #include "color.h"
 
-#include <math/mathf.h>
+#include "mathf.h"
 
 Color Color::medium_violet_red(199, 21, 133);      // NOLINT(cert-err58-cpp)
 Color Color::deep_pink(255, 20, 147);              // NOLINT(cert-err58-cpp)
@@ -148,64 +148,64 @@ Color Color::light_gray(211, 211, 211);            // NOLINT(cert-err58-cpp)
 
 Color::Color() : Color(255) {}
 
-Color::Color(const glm::vec4 &color) : m_color_data(color) {}
-Color::Color(const glm::vec3 &color) : m_color_data(color, 1.0f) {}
-
 Color::Color(int c) : Color(c, c, c) {}
 Color::Color(float c) : Color(c, c, c) {}
-Color::Color(uint32_t c) : Color(c, c, c) {}
+Color::Color(uint8_t c) : Color(c, c, c) {}
 
 Color::Color(int c, int a) : Color(c, c, c, a) {}
 Color::Color(float c, float a) : Color(c, c, c, a) {}
-Color::Color(uint32_t c, uint32_t a) : Color(c, c, c, a) {}
+Color::Color(uint8_t c, uint8_t a) : Color(c, c, c, a) {}
 
-Color::Color(int r, int g, int b) : Color((uint32_t) r, (uint32_t) g, (uint32_t) b) {}
+Color::Color(int r, int g, int b) : Color((uint8_t) r, (uint8_t) g, (uint8_t) b) {}
 Color::Color(float r, float g, float b) : Color(r, g, b, 1.0f) {}
-Color::Color(uint32_t r, uint32_t g, uint32_t b) : Color(r, g, b, (uint32_t) 255) {}
+Color::Color(uint8_t r, uint8_t g, uint8_t b) : Color(r, g, b, (uint8_t) 255) {}
 
-Color::Color(int r, int g, int b, int a) : Color((uint32_t) r, (uint32_t) g, (uint32_t) b, (uint32_t) a) {}
+Color::Color(int r, int g, int b, int a) : Color((uint8_t) r, (uint8_t) g, (uint8_t) b, (uint8_t) a) {}
 Color::Color(float r, float g, float b, float a) : m_color_data({r, g, b, a}) {}
-Color::Color(uint32_t r, uint32_t g, uint32_t b, uint32_t a) : m_color_data({r / 255.0, g / 255.0, b / 255.0, a / 255.0}) {}
+Color::Color(uint8_t r, uint8_t g, uint8_t b, uint8_t a)
+    : m_color_data({(float) r / 255.0f, (float) g / 255.0f, (float) b / 255.0f, (float) a / 255.0f}) {}
 
-void Color::set_color(const glm::vec4 &color) { m_color_data = color; }
-void Color::set_color(const glm::vec3 &color) { m_color_data = {color, m_color_data.a}; }
-void Color::set_color(uint32_t r, uint32_t g, uint32_t b) { m_color_data = {r / 255.0, g / 255.0, b / 255.0, m_color_data.a}; }
-void Color::set_color(uint32_t r, uint32_t g, uint32_t b, uint32_t a) { m_color_data = {r / 255.0, g / 255.0, b / 255.0, a / 255.0}; }
+void Color::set_color(uint8_t r, uint8_t g, uint8_t b) {
+    m_color_data = {(float) r / 255.0f, (float) g / 255.0f, (float) b / 255.0f, m_color_data.a};
+}
+void Color::set_color(uint8_t r, uint8_t g, uint8_t b, uint8_t a) {
+    m_color_data = {(float) r / 255.0f, (float) g / 255.0f, (float) b / 255.0f, (float) a / 255.0f};
+}
 void Color::set_color(float r, float g, float b) { m_color_data = {r, g, b, m_color_data.a}; }
 void Color::set_color(float r, float g, float b, float a) { m_color_data = {r, g, b, a}; }
 
-void Color::set_r(uint32_t r) { m_color_data.r = r / 255.0; }
-void Color::set_g(uint32_t g) { m_color_data.g = g / 255.0; }
-void Color::set_b(uint32_t b) { m_color_data.b = b / 255.0; }
-void Color::set_a(uint32_t a) { m_color_data.a = a / 255.0; }
-uint32_t Color::get_r() const { return (uint32_t)(m_color_data.r * 255); }
-uint32_t Color::get_g() const { return (uint32_t)(m_color_data.g * 255); }
-uint32_t Color::get_b() const { return (uint32_t)(m_color_data.b * 255); }
-uint32_t Color::get_a() const { return (uint32_t)(m_color_data.a * 255); }
+void Color::set_r(uint8_t r) { m_color_data.r = (float) r / 255.0f; }
+void Color::set_g(uint8_t g) { m_color_data.g = (float) g / 255.0f; }
+void Color::set_b(uint8_t b) { m_color_data.b = (float) b / 255.0f; }
+void Color::set_a(uint8_t a) { m_color_data.a = (float) a / 255.0f; }
+uint8_t Color::get_r() const { return (uint8_t)(m_color_data.r * 255); }
+uint8_t Color::get_g() const { return (uint8_t)(m_color_data.g * 255); }
+uint8_t Color::get_b() const { return (uint8_t)(m_color_data.b * 255); }
+uint8_t Color::get_a() const { return (uint8_t)(m_color_data.a * 255); }
 
 void Color::set_r(float r) { m_color_data.r = r; }
 void Color::set_g(float g) { m_color_data.g = g; }
 void Color::set_b(float b) { m_color_data.b = b; }
 void Color::set_a(float a) { m_color_data.a = a; }
-float Color::get_rf() const { return m_color_data.r; }
-float Color::get_gf() const { return m_color_data.g; }
-float Color::get_bf() const { return m_color_data.b; }
-float Color::get_af() const { return m_color_data.a; }
+float Color::get_rf() const { return (float) m_color_data.r; }
+float Color::get_gf() const { return (float) m_color_data.g; }
+float Color::get_bf() const { return (float) m_color_data.b; }
+float Color::get_af() const { return (float) m_color_data.a; }
 
 Color::operator uint32_t() const {
-    uint32_t r = (uint32_t)(m_color_data.r * 255) & 0xFF;
-    uint32_t g = (uint32_t)(m_color_data.g * 255) & 0xFF;
-    uint32_t b = (uint32_t)(m_color_data.b * 255) & 0xFF;
-    uint32_t a = (uint32_t)(m_color_data.a * 255) & 0xFF;
+    uint8_t r = (uint8_t)(m_color_data.r * 255.0F) & 0xFF;
+    uint8_t g = (uint8_t)(m_color_data.g * 255.0F) & 0xFF;
+    uint8_t b = (uint8_t)(m_color_data.b * 255.0F) & 0xFF;
+    uint8_t a = (uint8_t)(m_color_data.a * 255.0F) & 0xFF;
 
-    return (r << 24) | (g << 16) | (b << 8) | (a << 0);
+    return (a << 24) | (b << 16) | (g << 8) | (r << 0);
 }
 
 void Color::set_hsv(int hue, float saturation, float value) {
     hue = (hue % 360 + 360) % 360;
 
     float c = saturation * value;
-    auto x = (float) (c * (1 - abs(fmod(hue / 60.0, 2) - 1)));
+    auto x = (float) (c * (1 - mathf::abs(fmod(hue / 60.0, 2) - 1)));
     float m = value - c;
 
     float r, g, b;
@@ -227,7 +227,7 @@ void Color::set_hsv(int hue, float saturation, float value) {
 }
 
 Color Color::from_hsv(int hue, float saturation, float value) {
-    Color color(glm::vec4(1.0f));
+    Color color(255);
     color.set_hsv(hue, saturation, value);
     return color;
 }
@@ -252,6 +252,12 @@ Color Color::shade(float percent) const {
 }
 
 Color::operator int() const { return (int) operator uint32_t(); }
-Color::operator glm::vec4() { return m_color_data; }
 
-Color::operator float *() { return &m_color_data.x; }
+void Color::export_to(uint32_t index, uint8_t *buffer) const {
+    buffer[index * COLOR_DEPTH + 0] = get_r();
+    buffer[index * COLOR_DEPTH + 1] = get_g();
+    buffer[index * COLOR_DEPTH + 2] = get_b();
+    buffer[index * COLOR_DEPTH + 3] = get_a();
+}
+
+Color::operator float *() { return &m_color_data.r; }
