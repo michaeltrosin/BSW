@@ -7,7 +7,7 @@
 #include <core/texture/texture_generator.h>
 #include <stb_image/stb_image.h>
 
-Ref<bsw::Texture2D> bsw::Texture2D::unknown_texture;
+[[maybe_unused]] Ref<bsw::Texture2D> bsw::Texture2D::unknown_texture;
 
 bsw::Texture2D::Texture2D() = default;
 
@@ -62,7 +62,7 @@ bsw::Texture2D::Texture2D(const std::string &path, uint32_t offx, uint32_t offy,
 
 bsw::Texture2D::Texture2D(const std::string &path) {
     int width, height, channels;
-    stbi_set_flip_vertically_on_load(1);
+    //    stbi_set_flip_vertically_on_load(1);
     uint8_t *data;
     { data = stbi_load(path.c_str(), &width, &height, &channels, 0); }
 

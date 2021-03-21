@@ -5,6 +5,7 @@ set(CMAKE_CXX_STANDARD 17)
 
 set(DEP_FOLDER ${CMAKE_CURRENT_SOURCE_DIR}/dependencies)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17")
+set(CMAKE_EXE_LINKER_FLAGS " -static")
 
 #TODO: Remove on release build!!
 add_compile_definitions(BUILD_DEBUG)
@@ -34,10 +35,10 @@ add_executable(${SANDBOX}
         sandbox/main.cpp
         sandbox/screens/test2d.cpp
         sandbox/screens/test2d.h
-        "sandbox/test platformer/platformer.cpp"
-        "sandbox/test platformer/platformer.h"
-        "sandbox/test platformer/player.cpp"
-        "sandbox/test platformer/player.h")
+        sandbox/snake/snake_screen.cpp
+        sandbox/snake/snake_screen.h
+        sandbox/snake/snake.cpp
+        sandbox/snake/snake.h)
 
 target_link_libraries(${SANDBOX} ${ENGINE})
 # Builds Engine as a library
@@ -103,8 +104,6 @@ add_library(${ENGINE}
         engine/core/render/gl_render.h
         engine/core/font/font.cpp
         engine/core/font/font.h
-        engine/core/font/font_manager.cpp
-        engine/core/font/font_manager.h
         engine/core/render/camera/camera.h
         engine/core/input/input.h
         engine/core/input/input.cpp
@@ -139,6 +138,7 @@ include_directories(${DEP_FOLDER}/freetype-2.10.4/include)
 find_package(OpenGL REQUIRED)
 include_directories(${OPENGL_INCLUDE_DIR})
 target_link_libraries(${ENGINE} opengl32 glfw freetype)
+target_link_libraries(${ENGINE} -static-libgcc -static-libstdc++)
 
 
 #

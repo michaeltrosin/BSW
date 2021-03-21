@@ -15,7 +15,7 @@
 namespace bsw {
 class Texture2D {
 public:
-    static Ref<Texture2D> unknown_texture;
+    [[maybe_unused]] static Ref<Texture2D> unknown_texture;
 
     Texture2D();
     explicit Texture2D(const std::string &path);
