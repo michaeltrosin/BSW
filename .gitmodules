@@ -1,0 +1,6 @@
+[submodule "CPPMath"]
+	path = CPPMath
+	url = https://github.com/michaeltrosin/CPPMath
+[submodule "CPPUtils"]
+	path = CPPUtils
+	url = https://github.com/michaeltrosin/CPPUtils

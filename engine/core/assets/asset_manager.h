@@ -7,6 +7,9 @@
 #include <string>
 #include <utils/file.h>
 
+using namespace IO;
+
+namespace bsw {
 class AssetManager {
 public:
     /**
@@ -55,3 +58,4 @@ private:
     static std::string m_root_path;
     static std::string m_resource_path;
 };
+}// namespace bsw

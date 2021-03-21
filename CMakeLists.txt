@@ -2,34 +2,16 @@ cmake_minimum_required(VERSION 3.17)
 project(BSW)
 
 set(CMAKE_CXX_STANDARD 17)
-
-set(DEP_FOLDER ${CMAKE_CURRENT_SOURCE_DIR}/dependencies)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17")
 set(CMAKE_EXE_LINKER_FLAGS " -static")
+
+set(DEP_FOLDER ${CMAKE_CURRENT_SOURCE_DIR}/dependencies)
 
 #TODO: Remove on release build!!
 add_compile_definitions(BUILD_DEBUG)
 
 set(ENGINE EngineCore)
 set(SANDBOX Sandbox)
-
-set(UTILS Utils)
-set(MATH Math)
-
-add_library(${UTILS}
-        utils/utils/file.h
-        utils/utils/file.cpp
-        utils/utils/logging.h
-        utils/utils/macros.h
-        utils/utils/assertion.h
-        )
-
-add_library(${MATH}
-        math/math/mathf.h
-        math/math/mathf.cpp
-        math/math/color.h
-        math/math/color.cpp
-        )
 
 add_executable(${SANDBOX}
         sandbox/main.cpp
@@ -116,11 +98,15 @@ add_library(${ENGINE}
         engine/core/texture/animation.cpp
         engine/core/texture/animation.h)
 
-target_link_libraries(${ENGINE} ${UTILS} ${MATH})
+add_subdirectory(CPPMath)
+include_directories(CPPMath)
+add_subdirectory(CPPUtils)
+include_directories(CPPUtils)
+
+target_link_libraries(${ENGINE} -static-libgcc -static-libstdc++)
+target_link_libraries(${ENGINE} Math Utils)
 
 include_directories(engine)
-include_directories(math)
-include_directories(utils)
 # include_directories(network)
 
 include_directories(${DEP_FOLDER}/include/vendor)
@@ -139,7 +125,6 @@ include_directories(${DEP_FOLDER}/freetype-2.10.4/include)
 find_package(OpenGL REQUIRED)
 include_directories(${OPENGL_INCLUDE_DIR})
 target_link_libraries(${ENGINE} opengl32 glfw freetype)
-target_link_libraries(${ENGINE} -static-libgcc -static-libstdc++)
 
 
 #

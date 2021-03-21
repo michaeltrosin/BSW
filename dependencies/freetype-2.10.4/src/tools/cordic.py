@@ -1,9 +1,9 @@
 # compute arctangent table for CORDIC computations in fttrigon.c
-import sys, math
+import sys, CPPMath
 
 #units  = 64*65536.0   # don't change !!
 units  = 180 * 2**16
-scale  = units/math.pi
+scale  = units / CPPMath.pi
 shrink = 1.0
 comma  = ""
 
@@ -14,7 +14,7 @@ for n in range(1,32):
 
     x = 0.5**n                      # tangent value
 
-    angle  = math.atan(x)           # arctangent
+    angle  = CPPMath.atan(x)           # arctangent
     angle2 = round(angle*scale)     # arctangent in FT_Angle units
 
     if angle2 <= 0:
@@ -23,7 +23,7 @@ for n in range(1,32):
     sys.stdout.write( comma + repr( int(angle2) ) )
     comma = ", "
 
-    shrink /= math.sqrt( 1 + x*x )
+    shrink /= CPPMath.sqrt(1 + x * x)
 
 print
 print "shrink factor    = " + repr( shrink )
