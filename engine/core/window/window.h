@@ -27,8 +27,10 @@ struct WindowProps {
     std::string title;
     uint32_t width;
     uint32_t height;
+    bool resizable;
 
-    explicit WindowProps(std::string title, int width = 1280, int height = 720) : title(std::move(title)), width(width), height(height) {}
+    explicit WindowProps(std::string title, int width = 1280, int height = 720, bool resizable = true)
+        : title(std::move(title)), width(width), height(height), resizable(resizable) {}
 };
 
 class Window {

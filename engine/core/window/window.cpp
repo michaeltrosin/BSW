@@ -18,6 +18,8 @@ bsw::Window::Window(const WindowProps &window_props) {
     //  glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 5);
     //  glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     //    glfwWindowHint(GLFW_SAMPLES, 4);
+    if (!window_props.resizable) glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
+
     m_window = glfwCreateWindow((int) window_props.width, (int) window_props.height, window_props.title.c_str(), nullptr, nullptr);
     if (!m_window) {
         shutdown();
