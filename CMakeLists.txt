@@ -113,7 +113,8 @@ add_library(${ENGINE}
         engine/core/texture/texture_generator.h
         engine/core/assets/resource_manager.cpp
         engine/core/assets/resource_manager.h
-        )
+        engine/core/texture/animation.cpp
+        engine/core/texture/animation.h)
 
 target_link_libraries(${ENGINE} ${UTILS} ${MATH})
 

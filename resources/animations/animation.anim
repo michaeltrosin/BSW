@@ -1,6 +1,6 @@
 {
   "fps": 2,
-  "atlas": "animations/animation.atlas",
+  "atlas": "animations/animation.png.atlas",
   "animations": [
     {
       "name": "idle",
