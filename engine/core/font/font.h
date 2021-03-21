@@ -5,7 +5,6 @@
 #pragma once
 
 #include <bsw.h>
-#include <core/render/texture/texture2d.h>
 #include <ft2build.h>
 
 #include <glm/glm.hpp>
@@ -15,6 +14,9 @@
 #include <freetype/freetype.h>
 #include FT_FREETYPE_H
 
+#include <core/texture/texture2d.h>
+
+//TODO: Add font handler (caching font sizes with names)
 namespace bsw {
 class Font {
 public:
@@ -30,7 +32,7 @@ public:
         int32_t yoffset;
     };
 
-    explicit Font(const std::string &file_path, uint32_t font_size = 24);
+    Font(const std::string &file_path, uint32_t font_size = 24);
 
     /**
      * Gets the font metrics from a character
@@ -43,7 +45,7 @@ public:
      * Gets the atlas texture
      * @return
      */
-    const Ref<bsw::Texture2D> &get_atlas() const;
+    const Ref<Texture2D> &get_atlas() const;
 
     /**
      * Gets the font size

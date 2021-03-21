@@ -9,7 +9,7 @@
 #include <core/render/shading/shader.h>
 
 #include <core/assets/resource_manager.h>
-#include <core/render/texture/texture_generator.h>
+#include <core/texture/texture_generator.h>
 #include <glm/gtc/matrix_transform.hpp>
 
 const uint32_t AnchorTL = (uint32_t)(bsw::AnchorPosition::TOP | bsw::AnchorPosition::LEFT);
@@ -56,6 +56,7 @@ struct Renderer2DData {
 };
 
 static Renderer2DData data;
+static bool draw_begin;
 
 void bsw::Renderer2D::init() {
     data.quad_vertex_array = create_ref<VertexArray>();
@@ -112,13 +113,18 @@ void bsw::Renderer2D::init() {
 void bsw::Renderer2D::shutdown() { delete[] data.quad_vertex_buffer_base; }
 
 void bsw::Renderer2D::begin(const glm::mat4 &view_projection) {
+    draw_begin = true;
+
     data.texture_shader->bind();
     data.texture_shader->set_mat_4("u_ViewProjection", view_projection);
 
     start_batch();
 }
 
-void bsw::Renderer2D::end() { flush(); }
+void bsw::Renderer2D::end() {
+    draw_begin = false;
+    flush();
+}
 
 void bsw::Renderer2D::start_batch() {
     data.quad_index_count = 0;
@@ -168,6 +174,8 @@ void bsw::Renderer2D::draw_quad(const glm::vec3 &position, const glm::vec2 &size
 }
 
 void bsw::Renderer2D::draw_quad(const glm::mat4 &transform, const Color &color) {
+    ASSERT_NO_MSG(draw_begin);
+
     constexpr size_t quad_vertex_count = 4;
     const float texture_index = 0.0f;// White Texture
     constexpr glm::vec2 texture_coords[] = {{0.0f, 0.0f}, {1.0f, 0.0f}, {1.0f, 1.0f}, {0.0f, 1.0f}};
@@ -191,6 +199,8 @@ void bsw::Renderer2D::draw_quad(const glm::mat4 &transform, const Color &color) 
 
 void bsw::Renderer2D::draw_quad(const glm::mat4 &transform, const Ref<Texture2D> &texture, glm::vec2 *tex_coords, float tiling_factor,
                                 const Color &tint_color) {
+    ASSERT_NO_MSG(draw_begin);
+
     constexpr size_t quad_vertex_count = 4;
     Color color = tint_color;
 
@@ -365,17 +375,20 @@ void bsw::Renderer2D::draw_sub_quad(const glm::mat4 &transform, const Ref<Textur
 }
 
 #pragma region FontRendering
-void bsw::Renderer2D::draw_string(const std::string &text, const glm::vec2 &position, const Font &font, const Color &text_color) {
+void bsw::Renderer2D::draw_string(const std::string &text, const glm::vec2 &position, Ref<Font> font, const Color &text_color) {
     draw_string(text, glm::vec3(position, 1.0f), font, text_color);
 }
 
-void bsw::Renderer2D::draw_string(const std::string &text, const glm::vec3 &position, const bsw::Font &font, const Color &text_color) {
+void bsw::Renderer2D::draw_string(const std::string &text, const glm::vec3 &position, Ref<Font> font, const Color &text_color) {
     float x = position.x;
     float y = position.y;
 
+    uint32_t saved_anchor = data.anchor_position;
+    set_anchor_position(AnchorCC);
+
     std::string::const_iterator c;
     for (c = text.begin(); c != text.end(); c++) {
-        auto metrics = font.get_font_data(*c);
+        auto metrics = font->get_font_data(*c);
 
         float xpos = (x + metrics.bearing.x);
         float ypos = (y - metrics.bearing.y);
@@ -383,20 +396,21 @@ void bsw::Renderer2D::draw_string(const std::string &text, const glm::vec3 &posi
         float w = metrics.size.x;
         float h = metrics.size.y;
 
-        draw_sub_quad({xpos + w / 2, ypos + h / 2, position.z}, {w, h}, font.get_atlas(), {metrics.xoffset, metrics.yoffset}, {w, h}, 1.0f,
+        draw_sub_quad({xpos + w / 2, ypos + h / 2, position.z}, {w, h}, font->get_atlas(), {metrics.xoffset, metrics.yoffset}, {w, h}, 1.0f,
                       text_color);
 
         x += metrics.advance.x / 64;
     }
+    set_anchor_position(saved_anchor);
 }
 
-void bsw::Renderer2D::draw_centered_string(const std::string &text, const glm::vec2 &position, const Font &font, const Color &text_color) {
-    draw_centered_string(text, glm::vec3(position, 1.0f), font, text_color);
+void bsw::Renderer2D::draw_centered_string(const std::string &text, const glm::vec2 &position, Ref<Font> font, const Color &text_color) {
+    draw_centered_string(text, glm::vec3(position, 1.0f), std::move(font), text_color);
 }
 
-void bsw::Renderer2D::draw_centered_string(const std::string &text, const glm::vec3 &position, const bsw::Font &font, const Color &text_color) {
-    float width = font.get_string_width(text);
-    float height = font.get_string_height(text);
+void bsw::Renderer2D::draw_centered_string(const std::string &text, const glm::vec3 &position, Ref<Font> font, const Color &text_color) {
+    float width = font->get_string_width(text);
+    float height = font->get_string_height(text);
 
     draw_string(text, {position.x - width / 2, position.y - height / 2}, font, text_color);
 }

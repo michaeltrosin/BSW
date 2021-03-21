@@ -6,7 +6,9 @@
 
 #include <algorithm>
 
-bsw::Font::Font(const std::string &file_path, uint32_t font_size) : m_font_size(font_size) {
+bsw::Font::Font(const std::string &file_path, uint32_t font_size) {
+    m_font_size = mathf::min(font_size, 48);
+
     if (FT_Init_FreeType(&m_library)) { ASSERT_NOT_REACHED("Font Library not initialized!"); }
 
     if (FT_New_Face(m_library, file_path.c_str(), 0, &m_face)) { ASSERT_NOT_REACHED("Font not initialized!"); }

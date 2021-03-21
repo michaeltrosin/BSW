@@ -6,6 +6,118 @@
 
 #include "mathf.h"
 
+Color::Color() : Color(255) {}
+
+Color::Color(int c) : Color(c, c, c) {}
+Color::Color(float c) : Color(c, c, c) {}
+Color::Color(uint8_t c) : Color(c, c, c) {}
+
+Color::Color(int c, int a) : Color(c, c, c, a) {}
+Color::Color(float c, float a) : Color(c, c, c, a) {}
+Color::Color(uint8_t c, uint8_t a) : Color(c, c, c, a) {}
+
+Color::Color(int r, int g, int b) : Color((uint8_t) r, (uint8_t) g, (uint8_t) b) {}
+Color::Color(float r, float g, float b) : Color(r, g, b, 1.0f) {}
+Color::Color(uint8_t r, uint8_t g, uint8_t b) : Color(r, g, b, (uint8_t) 255) {}
+
+Color::Color(int r, int g, int b, int a) : Color((uint8_t) r, (uint8_t) g, (uint8_t) b, (uint8_t) a) {}
+Color::Color(float r, float g, float b, float a) : m_color_data({r, g, b, a}) {}
+Color::Color(uint8_t r, uint8_t g, uint8_t b, uint8_t a)
+    : m_color_data({(float) r / 255.0f, (float) g / 255.0f, (float) b / 255.0f, (float) a / 255.0f}) {}
+
+void Color::set_color(uint8_t r, uint8_t g, uint8_t b) {
+    m_color_data = {(float) r / 255.0f, (float) g / 255.0f, (float) b / 255.0f, m_color_data.a};
+}
+void Color::set_color(uint8_t r, uint8_t g, uint8_t b, uint8_t a) {
+    m_color_data = {(float) r / 255.0f, (float) g / 255.0f, (float) b / 255.0f, (float) a / 255.0f};
+}
+void Color::set_color(float r, float g, float b) { m_color_data = {r, g, b, m_color_data.a}; }
+void Color::set_color(float r, float g, float b, float a) { m_color_data = {r, g, b, a}; }
+
+void Color::set_r(uint8_t r) { m_color_data.r = (float) r / 255.0f; }
+void Color::set_g(uint8_t g) { m_color_data.g = (float) g / 255.0f; }
+void Color::set_b(uint8_t b) { m_color_data.b = (float) b / 255.0f; }
+void Color::set_a(uint8_t a) { m_color_data.a = (float) a / 255.0f; }
+
+uint8_t Color::get_r() const { return (uint8_t)(m_color_data.r * 255); }
+uint8_t Color::get_g() const { return (uint8_t)(m_color_data.g * 255); }
+uint8_t Color::get_b() const { return (uint8_t)(m_color_data.b * 255); }
+uint8_t Color::get_a() const { return (uint8_t)(m_color_data.a * 255); }
+
+void Color::set_r(float r) { m_color_data.r = r; }
+void Color::set_g(float g) { m_color_data.g = g; }
+void Color::set_b(float b) { m_color_data.b = b; }
+void Color::set_a(float a) { m_color_data.a = a; }
+
+float Color::get_rf() const { return (float) m_color_data.r; }
+float Color::get_gf() const { return (float) m_color_data.g; }
+float Color::get_bf() const { return (float) m_color_data.b; }
+float Color::get_af() const { return (float) m_color_data.a; }
+
+Color::operator uint32_t() const {
+    uint8_t r = (uint8_t)(m_color_data.r * 255.0F) & 0xFF;
+    uint8_t g = (uint8_t)(m_color_data.g * 255.0F) & 0xFF;
+    uint8_t b = (uint8_t)(m_color_data.b * 255.0F) & 0xFF;
+    uint8_t a = (uint8_t)(m_color_data.a * 255.0F) & 0xFF;
+
+    return (a << 24) | (b << 16) | (g << 8) | (r << 0);
+}
+
+void Color::set_hsv(int hue, float saturation, float value) {
+    hue = (hue % 360 + 360) % 360;
+
+    float c = saturation * value;
+    auto x = (float) (c * (1 - mathf::abs(fmod(hue / 60.0, 2) - 1)));
+    float m = value - c;
+
+    float r, g, b;
+    if (hue >= 0 && hue < 60) {
+        r = c, g = x, b = 0;
+    } else if (hue >= 60 && hue < 120) {
+        r = x, g = c, b = 0;
+    } else if (hue >= 120 && hue < 180) {
+        r = 0, g = c, b = x;
+    } else if (hue >= 180 && hue < 240) {
+        r = 0, g = x, b = c;
+    } else if (hue >= 240 && hue < 300) {
+        r = x, g = 0, b = c;
+    } else {
+        r = c, g = 0, b = x;
+    }
+
+    m_color_data = {(r + m), (g + m), (b + m), m_color_data.a};
+}
+
+Color Color::from_hsv(int hue, float saturation, float value) {
+    Color color(255);
+    color.set_hsv(hue, saturation, value);
+    return color;
+}
+
+Color Color::darken() const { return shade(-25); }
+Color Color::lighten() const { return shade(25); }
+
+Color Color::shade(float percent) const {
+    float r = get_r();
+    float g = get_g();
+    float b = get_b();
+
+    r = (float) (r * (100 + percent) / 100);
+    g = (float) (g * (100 + percent) / 100);
+    b = (float) (b * (100 + percent) / 100);
+
+    r = (r < 255) ? r : 255;
+    g = (g < 255) ? g : 255;
+    b = (b < 255) ? b : 255;
+
+    return {(int) r, (int) g, (int) b, (int) get_a()};
+}
+
+Color::operator int() const { return (int) operator uint32_t(); }
+Color::operator float *() { return &m_color_data.r; }
+
+#pragma region DefaultColorValues
+
 Color Color::medium_violet_red(199, 21, 133);      // NOLINT(cert-err58-cpp)
 Color Color::deep_pink(255, 20, 147);              // NOLINT(cert-err58-cpp)
 Color Color::pale_violet_red(219, 112, 147);       // NOLINT(cert-err58-cpp)
@@ -146,118 +258,4 @@ Color Color::dark_gray(169, 169, 169);             // NOLINT(cert-err58-cpp)
 Color Color::silver(192, 192, 192);                // NOLINT(cert-err58-cpp)
 Color Color::light_gray(211, 211, 211);            // NOLINT(cert-err58-cpp)
 
-Color::Color() : Color(255) {}
-
-Color::Color(int c) : Color(c, c, c) {}
-Color::Color(float c) : Color(c, c, c) {}
-Color::Color(uint8_t c) : Color(c, c, c) {}
-
-Color::Color(int c, int a) : Color(c, c, c, a) {}
-Color::Color(float c, float a) : Color(c, c, c, a) {}
-Color::Color(uint8_t c, uint8_t a) : Color(c, c, c, a) {}
-
-Color::Color(int r, int g, int b) : Color((uint8_t) r, (uint8_t) g, (uint8_t) b) {}
-Color::Color(float r, float g, float b) : Color(r, g, b, 1.0f) {}
-Color::Color(uint8_t r, uint8_t g, uint8_t b) : Color(r, g, b, (uint8_t) 255) {}
-
-Color::Color(int r, int g, int b, int a) : Color((uint8_t) r, (uint8_t) g, (uint8_t) b, (uint8_t) a) {}
-Color::Color(float r, float g, float b, float a) : m_color_data({r, g, b, a}) {}
-Color::Color(uint8_t r, uint8_t g, uint8_t b, uint8_t a)
-    : m_color_data({(float) r / 255.0f, (float) g / 255.0f, (float) b / 255.0f, (float) a / 255.0f}) {}
-
-void Color::set_color(uint8_t r, uint8_t g, uint8_t b) {
-    m_color_data = {(float) r / 255.0f, (float) g / 255.0f, (float) b / 255.0f, m_color_data.a};
-}
-void Color::set_color(uint8_t r, uint8_t g, uint8_t b, uint8_t a) {
-    m_color_data = {(float) r / 255.0f, (float) g / 255.0f, (float) b / 255.0f, (float) a / 255.0f};
-}
-void Color::set_color(float r, float g, float b) { m_color_data = {r, g, b, m_color_data.a}; }
-void Color::set_color(float r, float g, float b, float a) { m_color_data = {r, g, b, a}; }
-
-void Color::set_r(uint8_t r) { m_color_data.r = (float) r / 255.0f; }
-void Color::set_g(uint8_t g) { m_color_data.g = (float) g / 255.0f; }
-void Color::set_b(uint8_t b) { m_color_data.b = (float) b / 255.0f; }
-void Color::set_a(uint8_t a) { m_color_data.a = (float) a / 255.0f; }
-uint8_t Color::get_r() const { return (uint8_t)(m_color_data.r * 255); }
-uint8_t Color::get_g() const { return (uint8_t)(m_color_data.g * 255); }
-uint8_t Color::get_b() const { return (uint8_t)(m_color_data.b * 255); }
-uint8_t Color::get_a() const { return (uint8_t)(m_color_data.a * 255); }
-
-void Color::set_r(float r) { m_color_data.r = r; }
-void Color::set_g(float g) { m_color_data.g = g; }
-void Color::set_b(float b) { m_color_data.b = b; }
-void Color::set_a(float a) { m_color_data.a = a; }
-float Color::get_rf() const { return (float) m_color_data.r; }
-float Color::get_gf() const { return (float) m_color_data.g; }
-float Color::get_bf() const { return (float) m_color_data.b; }
-float Color::get_af() const { return (float) m_color_data.a; }
-
-Color::operator uint32_t() const {
-    uint8_t r = (uint8_t)(m_color_data.r * 255.0F) & 0xFF;
-    uint8_t g = (uint8_t)(m_color_data.g * 255.0F) & 0xFF;
-    uint8_t b = (uint8_t)(m_color_data.b * 255.0F) & 0xFF;
-    uint8_t a = (uint8_t)(m_color_data.a * 255.0F) & 0xFF;
-
-    return (a << 24) | (b << 16) | (g << 8) | (r << 0);
-}
-
-void Color::set_hsv(int hue, float saturation, float value) {
-    hue = (hue % 360 + 360) % 360;
-
-    float c = saturation * value;
-    auto x = (float) (c * (1 - mathf::abs(fmod(hue / 60.0, 2) - 1)));
-    float m = value - c;
-
-    float r, g, b;
-    if (hue >= 0 && hue < 60) {
-        r = c, g = x, b = 0;
-    } else if (hue >= 60 && hue < 120) {
-        r = x, g = c, b = 0;
-    } else if (hue >= 120 && hue < 180) {
-        r = 0, g = c, b = x;
-    } else if (hue >= 180 && hue < 240) {
-        r = 0, g = x, b = c;
-    } else if (hue >= 240 && hue < 300) {
-        r = x, g = 0, b = c;
-    } else {
-        r = c, g = 0, b = x;
-    }
-
-    m_color_data = {(r + m), (g + m), (b + m), m_color_data.a};
-}
-
-Color Color::from_hsv(int hue, float saturation, float value) {
-    Color color(255);
-    color.set_hsv(hue, saturation, value);
-    return color;
-}
-
-Color Color::darken() const { return shade(-25); }
-Color Color::lighten() const { return shade(25); }
-
-Color Color::shade(float percent) const {
-    float r = get_r();
-    float g = get_g();
-    float b = get_b();
-
-    r = (float) (r * (100 + percent) / 100);
-    g = (float) (g * (100 + percent) / 100);
-    b = (float) (b * (100 + percent) / 100);
-
-    r = (r < 255) ? r : 255;
-    g = (g < 255) ? g : 255;
-    b = (b < 255) ? b : 255;
-
-    return {(int) r, (int) g, (int) b, (int) get_a()};
-}
-
-Color::operator int() const { return (int) operator uint32_t(); }
-
-void Color::export_to(uint32_t index, uint8_t *buffer) const {
-    buffer[index * COLOR_DEPTH + 0] = get_r();
-    buffer[index * COLOR_DEPTH + 1] = get_g();
-    buffer[index * COLOR_DEPTH + 2] = get_b();
-    buffer[index * COLOR_DEPTH + 3] = get_a();
-}
-
-Color::operator float *() { return &m_color_data.r; }
+#pragma endregion DefaultColorValues

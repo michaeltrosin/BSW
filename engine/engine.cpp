@@ -5,7 +5,6 @@
 #include "engine.h"
 
 #include <bsw.h>
-#include <core/font/font_manager.h>
 #include <core/render/gl_render.h>
 #include <core/render/renderer2d.h>
 
@@ -40,8 +39,6 @@ void bsw::Engine::initialize() {
 
     GlRenderer::init();
     Renderer2D::init();
-
-    FontManager::init();
 }
 
 void bsw::Engine::on_event(Event &event) {
@@ -85,11 +82,18 @@ int bsw::Engine::run() {
 
         m_main_window->gui_handler()->begin();
 
-#ifdef BUILD_DEBUG
+#ifndef NO_DEBUG_DRAW
         ImGui::Begin("Debug", nullptr, ImGuiWindowFlags_AlwaysAutoResize);
         ImGui::Text("FPS: %d", current_fps);
         ImGui::Text("Updates: %d", current_updates);
         ImGui::Dummy({0, 5});
+
+        auto stats = Renderer2D::get_stats();
+        ImGui::Text("Renderer2D Stats:");
+        ImGui::Text("Draw Calls: %d", stats.draw_calls);
+        ImGui::Text("Quads: %d", stats.quad_count);
+        ImGui::Text("Vertices: %d", stats.get_total_vertex_count());
+        ImGui::Text("Indices: %d", stats.get_total_index_count());
         ImGui::End();
 #endif
         m_screen_handler->on_im_gui_render();
@@ -106,7 +110,6 @@ int bsw::Engine::run() {
         }
     }
 
-    FontManager::shutdown();
     File::cleanup_temp_files();
     return 0;
 }

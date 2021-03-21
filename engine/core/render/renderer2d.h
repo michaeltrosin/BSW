@@ -6,7 +6,6 @@
 
 // clang-format off
 #include <core/font/font.h>
-#include <core/render/texture/texture2d.h>
 #include <GLFW/glfw3.h>
 // clang-format on
 
@@ -108,10 +107,10 @@ public:
                                   float tiling_factor = 1.0f, const Color &tint_color = Color(255));
 
     //TODO: Add dynamic fontsize
-    static void draw_string(const std::string &text, const glm::vec2 &position, const Font &font, const Color &text_color = Color(255));
-    static void draw_string(const std::string &text, const glm::vec3 &position, const Font &font, const Color &text_color = Color(255));
-    static void draw_centered_string(const std::string &text, const glm::vec2 &position, const Font &font, const Color &text_color = Color(255));
-    static void draw_centered_string(const std::string &text, const glm::vec3 &position, const Font &font, const Color &text_color = Color(255));
+    static void draw_string(const std::string &text, const glm::vec2 &position, Ref<Font> font, const Color &text_color = Color(255));
+    static void draw_string(const std::string &text, const glm::vec3 &position, Ref<Font> font, const Color &text_color = Color(255));
+    static void draw_centered_string(const std::string &text, const glm::vec2 &position, Ref<Font> font, const Color &text_color = Color(255));
+    static void draw_centered_string(const std::string &text, const glm::vec3 &position, Ref<Font> font, const Color &text_color = Color(255));
 
 private:
     /**

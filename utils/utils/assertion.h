@@ -11,7 +11,7 @@
     do {                                                                                                                                             \
         if (!(x)) {                                                                                                                                  \
             std::cerr << "Assertion failed! '" << #x << "' at line " << __LINE__ << " in file " << __FILE__ << std::endl;                            \
-            std::cerr << "Reason: '" << (msg) << std::endl;                                                                                          \
+            std::cerr << "Reason: '" << (msg) << "'" << std::endl;                                                                                   \
             __debugbreak();                                                                                                                          \
         }                                                                                                                                            \
     } while (0)
@@ -22,7 +22,7 @@
 #define ASSERT_NOT_REACHED(msg)                                                                                                                      \
     do {                                                                                                                                             \
         std::cerr << "Reached invalid line " << __LINE__ << " in file " << __FILE__ << std::endl;                                                    \
-        std::cerr << "Reason: '" << (msg) << std::endl;                                                                                              \
+        std::cerr << "Reason: '" << (msg) << "'" << std::endl;                                                                                       \
         __debugbreak();                                                                                                                              \
     } while (0)
 
@@ -30,7 +30,7 @@
 #else
 #define ASSERT(x, msg)                                                                                                                               \
     std::cerr << "Assertion failed! '" << #x << "' at line " << __LINE__ << " in file " << __FILE__ << std::endl;                                    \
-    std::cerr << "Message: '" << (msg) << std::endl
+    std::cerr << "Message: '" << (msg) << "'" << std::endl
 #define ASSERT_NOT_REACHED()
 #define ASSERT_TYPE(...)
 #endif

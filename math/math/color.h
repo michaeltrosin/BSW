@@ -78,17 +78,6 @@ public:
     operator int() const;     // NOLINT(google-explicit-constructor)
     explicit operator float *();
 
-    /**
-     * Exports the rgba color values to a given buffer.
-     * Make sure, that it does have enough space to be put into
-     *
-     * A bitdepth from 4 will allways be applied internaly
-     *
-     * @param index
-     * @param buffer
-     */
-    void export_to(uint32_t index, uint8_t *buffer) const;
-
 private:
     struct {
         float r;

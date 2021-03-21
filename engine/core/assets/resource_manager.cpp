@@ -4,9 +4,6 @@
 
 #include "resource_manager.h"
 
-#include <core/font/font.h>
-#include <core/render/shading/shader.h>
-
 bsw::Resource<bsw::Shader> bsw::ResourceManager::load_shader(const std::string &path) {
     std::string asset_path = AssetManager::get_asset_path(path);
     Resource<Shader> shader = create_ref<Shader>(asset_path);
@@ -28,6 +25,6 @@ bsw::Resource<bsw::Texture2D> bsw::ResourceManager::load_texture(const std::stri
 
 bsw::Resource<bsw::Font> bsw::ResourceManager::load_font(const std::string &path, uint32_t font_size) {
     std::string asset_path = AssetManager::get_asset_path(path);
-    Resource<Font> font = create_ref<Font>(path, font_size);
+    Resource<Font> font = create_ref<Font>(asset_path, font_size);
     return font;
 }

@@ -6,14 +6,14 @@
 
 #include <bsw.h>
 
+#include <core/font/font.h>
+#include <core/render/shading/shader.h>
+#include <core/texture/texture2d.h>
+
 namespace bsw {
 
 template<typename T>
 using Resource = Ref<T>;
-
-class Font;
-class Shader;
-class Texture2D;
 
 class ResourceManager {
 public:
