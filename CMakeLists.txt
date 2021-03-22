@@ -13,16 +13,24 @@ add_compile_definitions(BUILD_DEBUG)
 set(ENGINE EngineCore)
 set(SANDBOX Sandbox)
 
-add_executable(${SANDBOX}
-        sandbox/main.cpp
-        sandbox/screens/test2d.cpp
-        sandbox/screens/test2d.h
-        sandbox/snake/snake_screen.cpp
-        sandbox/snake/snake_screen.h
-        sandbox/snake/snake.cpp
-        sandbox/snake/snake.h)
+add_executable(LOO
+        "league of oben/main.cpp"
+        "league of oben/screens/main_menu_screen.cpp"
+        "league of oben/screens/main_menu_screen.h"
+        "league of oben/game/camera.h" "league of oben/screens/game_screen.cpp" "league of oben/screens/game_screen.h")
 
-target_link_libraries(${SANDBOX} ${ENGINE})
+target_link_libraries(LOO ${ENGINE})
+
+#add_executable(${SANDBOX}
+#        sandbox/main.cpp
+#        sandbox/screens/test2d.cpp
+#        sandbox/screens/test2d.h
+#        sandbox/snake/snake_screen.cpp
+#        sandbox/snake/snake_screen.h
+#        sandbox/snake/snake.cpp
+#        sandbox/snake/snake.h)
+# target_link_libraries(${SANDBOX} ${ENGINE})
+
 # Builds Engine as a library
 add_library(${ENGINE}
         ${DEP_FOLDER}/glad/src/glad.c
@@ -98,10 +106,10 @@ add_library(${ENGINE}
         engine/core/texture/animation.cpp
         engine/core/texture/animation.h)
 
-add_subdirectory(CPPMath)
-include_directories(CPPMath)
-add_subdirectory(CPPUtils)
-include_directories(CPPUtils)
+add_subdirectory(${DEP_FOLDER}/CPPMath)
+include_directories(${DEP_FOLDER}/CPPMath)
+add_subdirectory(${DEP_FOLDER}/CPPUtils)
+include_directories(${DEP_FOLDER}/CPPUtils)
 
 target_link_libraries(${ENGINE} -static-libgcc -static-libstdc++)
 target_link_libraries(${ENGINE} Math Utils)
@@ -125,7 +133,6 @@ include_directories(${DEP_FOLDER}/freetype-2.10.4/include)
 find_package(OpenGL REQUIRED)
 include_directories(${OPENGL_INCLUDE_DIR})
 target_link_libraries(${ENGINE} opengl32 glfw freetype)
-
 
 #
 #   Copy resource folder to output
