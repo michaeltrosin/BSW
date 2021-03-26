@@ -1,9 +1,0 @@
-[submodule "CPPMath"]
-	path = dependencies/CPPMath
-	url = https://github.com/michaeltrosin/CPPMath
-[submodule "CPPUtils"]
-	path = dependencies/CPPUtils
-	url = https://github.com/michaeltrosin/CPPUtils
-[submodule "dependencies/CPPJson"]
-	path = dependencies/CPPJson
-	url = https://github.com/michaeltrosin/CPPJson
