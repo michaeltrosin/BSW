@@ -1,3 +1,0 @@
-[submodule "dependencies/CPPJson"]
-	path = dependencies/CPPJson
-	url = https://github.com/michaeltrosin/CPPJson
