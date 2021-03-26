@@ -4,3 +4,6 @@
 [submodule "CPPUtils"]
 	path = dependencies/CPPUtils
 	url = https://github.com/michaeltrosin/CPPUtils
+[submodule "CPPJson"]
+    path = dependencies/CPPJson
+    url = https://github.com/michaeltrosin/CPPJson
