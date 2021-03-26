@@ -67,6 +67,9 @@ public:
      */
     const Scoped<bsw::Window> &get_window_handle() const;
 
+    void disable_debug_drawing();
+    void enable_debug_drawing();
+
 private:
     static Scoped<Engine> m_instance;
 
@@ -82,6 +85,8 @@ private:
     void initialize();
 
 private:
+    bool m_debug_draw{true};
+
     float m_fps_limit = 60.0f;
 
     Scoped<ScreenHandler> m_screen_handler;

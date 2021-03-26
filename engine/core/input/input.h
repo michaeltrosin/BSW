@@ -5,6 +5,7 @@
 #pragma once
 
 #include <bsw.h>
+#include <core/event/mouse_events.h>
 #include <core/input/key_codes.h>
 #include <core/input/mouse_codes.h>
 #include <glm/glm.hpp>
@@ -46,5 +47,13 @@ public:
      * @return
      */
     static float get_mouse_y();
+
+    static float get_scroll_offset_x();
+    static float get_scroll_offset_y();
+
+    static void set_scroll_offset(float x, float y);
+private:
+    static float m_scroll_offset_x;
+    static float m_scroll_offset_y;
 };
 }// namespace bsw

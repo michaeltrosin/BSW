@@ -21,6 +21,14 @@ namespace bsw {
 using namespace key;
 using namespace mouse;
 
+//TODO: Add window icon
+/*
+ * GLFWimage images[1];
+images[0].pixels = stbi_load("PATH", &images[0].width, &images[0].height, 0, 4); //rgba channels
+glfwSetWindowIcon(window, 1, images);
+stbi_image_free(images[0].pixels);
+ */
+
 class Event;
 
 struct WindowProps {
@@ -134,12 +142,27 @@ public:
      */
     void set_title(const std::string &title);
 
+    /**
+     * Changes the windowmode to fullscreen or to default
+     * @param fullscreen
+     */
+    void set_window_mode(bool fullscreen);
+
+    /**
+     * Returns true if the window is fullscreen
+     * @return
+     */
+    bool is_fullscreen(){return glfwGetWindowMonitor(m_window) != nullptr;}
+
 private:
+    GLFWmonitor* get_current_monitor(){ return glfwGetPrimaryMonitor(); }
+
     Scoped<ImGuiHandler> m_im_gui_handler;
     GLFWwindow *m_window;
 
     struct WindowData {
         std::string title;
+        uint32_t x, y;
         uint32_t width, height;
         bool vsync = true;
 
@@ -147,5 +170,7 @@ private:
     };
 
     WindowData m_window_data;
+
+    WindowData m_saved_data;
 };
 }// namespace bsw

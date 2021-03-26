@@ -35,7 +35,6 @@ target_link_libraries(LOO ${ENGINE})
 add_library(${ENGINE}
         ${DEP_FOLDER}/glad/src/glad.c
 
-        ${DEP_FOLDER}/include/vendor/nlohmann/json.hpp
         ${DEP_FOLDER}/include/vendor/stb_image/stb_image.h
         ${DEP_FOLDER}/include/vendor/stb_image/stb_image.cpp
         ${DEP_FOLDER}/include/vendor/imgui/imconfig.h
@@ -110,6 +109,8 @@ add_subdirectory(${DEP_FOLDER}/CPPMath)
 include_directories(${DEP_FOLDER}/CPPMath)
 add_subdirectory(${DEP_FOLDER}/CPPUtils)
 include_directories(${DEP_FOLDER}/CPPUtils)
+#add_subdirectory(${DEP_FOLDER}/CPPJson)
+#include_directories(${DEP_FOLDER}/CPPJson)
 
 target_link_libraries(${ENGINE} -static-libgcc -static-libstdc++)
 target_link_libraries(${ENGINE} Math Utils)

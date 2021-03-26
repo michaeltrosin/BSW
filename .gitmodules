@@ -1,0 +1,3 @@
+[submodule "dependencies/cppjson"]
+	path = dependencies/cppjson
+	url = https://github.com/michaeltrosin/CPPJson

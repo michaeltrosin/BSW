@@ -11,6 +11,8 @@
 Scoped<bsw::Engine> bsw::Engine::m_instance;
 
 bsw::Engine &bsw::Engine::create(const WindowProps &props, const char **argv) {
+    if (m_instance != nullptr) return *Engine::m_instance;
+
     Engine::m_instance = create_scoped<Engine>();
     AssetManager::init(argv[0]);
 
@@ -45,8 +47,16 @@ void bsw::Engine::on_event(Event &event) {
     m_screen_handler->on_event(event);
 
     if (event.is<WindowResizeEvent>()) {
-        auto e = dynamic_cast<WindowResizeEvent *>(&event);
+        auto e = event.as<WindowResizeEvent>();
         GlRenderer::set_viewport(0, 0, e->get_width(), e->get_height());
+    } else if (event.is<KeyReleasedEvent>()) {
+        auto e = event.as<KeyReleasedEvent>();
+
+        if (e->get_key_code() == key::F_11) {
+            m_main_window->set_window_mode(true);
+        } else if (e->get_key_code() == key::F_12) {
+            m_main_window->set_window_mode(false);
+        }
     }
 }
 
@@ -82,24 +92,26 @@ int bsw::Engine::run() {
 
         m_main_window->gui_handler()->begin();
 
-#ifndef NO_DEBUG_DRAW
-        ImGui::Begin("Debug", nullptr, ImGuiWindowFlags_AlwaysAutoResize);
-        ImGui::Text("FPS: %d", current_fps);
-        ImGui::Text("Updates: %d", current_updates);
-        ImGui::Dummy({0, 5});
+        if (m_debug_draw) {
+            ImGui::Begin("Debug", nullptr, ImGuiWindowFlags_AlwaysAutoResize);
+            ImGui::Text("FPS: %d", current_fps);
+            ImGui::Text("Updates: %d", current_updates);
+            ImGui::Dummy({0, 5});
 
-        auto stats = Renderer2D::get_stats();
-        ImGui::Text("Renderer2D Stats:");
-        ImGui::Text("Draw Calls: %d", stats.draw_calls);
-        ImGui::Text("Quads: %d", stats.quad_count);
-        ImGui::Text("Vertices: %d", stats.get_total_vertex_count());
-        ImGui::Text("Indices: %d", stats.get_total_index_count());
-        ImGui::End();
-#endif
+            auto stats = Renderer2D::get_stats();
+            ImGui::Text("Renderer2D Stats:");
+            ImGui::Text("Draw Calls: %d", stats.draw_calls);
+            ImGui::Text("Quads: %d", stats.quad_count);
+            ImGui::Text("Vertices: %d", stats.get_total_vertex_count());
+            ImGui::Text("Indices: %d", stats.get_total_index_count());
+            ImGui::End();
+        }
         m_screen_handler->on_im_gui_render();
 
         m_main_window->gui_handler()->end();
         m_main_window->swap_buffers();
+
+        Renderer2D::reset_stats();
         // - Reset after one second
         if (glfwGetTime() - timer > 1.0) {
             timer++;
@@ -117,3 +129,6 @@ int bsw::Engine::run() {
 float bsw::Engine::get_runtime() const { return (float) glfwGetTime(); }
 
 const Scoped<bsw::Window> &bsw::Engine::get_window_handle() const { return m_main_window; }
+
+void bsw::Engine::disable_debug_drawing() { m_debug_draw = false; }
+void bsw::Engine::enable_debug_drawing() { m_debug_draw = true; }

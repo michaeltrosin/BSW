@@ -6,6 +6,7 @@
 
 #include <core/event/event.h>
 #include <core/event/event_handler.h>
+#include <core/input/input.h>
 #include <imgui/imgui.h>
 
 namespace bsw {
@@ -59,6 +60,9 @@ protected:
      * @return
      */
     uint32_t window_height();
+
+    bool key_pressed(bsw::KeyCode key_code);
+    bool mouse_pressed(bsw::MouseCode mouse_code);
 };
 
 }// namespace bsw

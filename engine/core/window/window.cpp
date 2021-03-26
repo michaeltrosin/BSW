@@ -171,3 +171,19 @@ bool bsw::Window::is_mouse_button_pressed(bsw::MouseCode button) { return glfwGe
 bool bsw::Window::is_key_pressed(bsw::KeyCode key) { return glfwGetKey(m_window, key); }
 
 void bsw::Window::set_title(const std::string &title) { glfwSetWindowTitle(m_window, title.c_str()); }
+
+void bsw::Window::set_window_mode(bool fullscreen) {
+    if(is_fullscreen() == fullscreen) return;
+
+    GLFWmonitor *monitor = get_current_monitor();
+
+    const GLFWvidmode *mode = glfwGetVideoMode(monitor);
+    if (fullscreen) {
+        glfwGetWindowPos(m_window, (int*) &m_saved_data.x, (int*) &m_saved_data.y);
+        glfwGetWindowSize(m_window, (int*) &m_saved_data.width, (int*) &m_saved_data.height);
+
+        glfwSetWindowMonitor(m_window, monitor, 0, 0, mode->width, mode->height, mode->refreshRate);
+    } else {
+        glfwSetWindowMonitor(m_window, nullptr, m_saved_data.x, m_saved_data.y, m_saved_data.width, m_saved_data.height, mode->refreshRate);
+    }
+}

@@ -80,6 +80,16 @@ public:
     }
 
     /**
+     * Casts this to type T*
+     * @tparam T
+     * @return
+     */
+    template<typename T>
+    T *as() {
+        return dynamic_cast<T *>(this);
+    }
+
+    /**
      * Returns true if this Event is inside a category
      * @param rhs
      * @return
