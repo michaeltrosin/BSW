@@ -1,3 +1,9 @@
 [submodule "dependencies/cppjson"]
 	path = dependencies/cppjson
 	url = https://github.com/michaeltrosin/CPPJson
+[submodule "dependencies/cpputils"]
+	path = dependencies/cpputils
+	url = https://github.com/michaeltrosin/CPPUtils
+[submodule "dependencies/cppmath"]
+	path = dependencies/cppmath
+	url = https://github.com/michaeltrosin/CPPMath
