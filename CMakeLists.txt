@@ -17,7 +17,7 @@ add_executable(LOO
         "league of oben/main.cpp"
         "league of oben/screens/main_menu_screen.cpp"
         "league of oben/screens/main_menu_screen.h"
-        "league of oben/game/camera.h" "league of oben/screens/game_screen.cpp" "league of oben/screens/game_screen.h")
+        "league of oben/game/camera.h")
 
 target_link_libraries(LOO ${ENGINE})
 
@@ -100,20 +100,18 @@ add_library(${ENGINE}
         engine/core/assets/asset_manager.h
         engine/core/texture/texture_generator.cpp
         engine/core/texture/texture_generator.h
-        engine/core/assets/resource_manager.cpp
-        engine/core/assets/resource_manager.h
         engine/core/texture/animation.cpp
         engine/core/texture/animation.h)
 
-add_subdirectory(${DEP_FOLDER}/CPPMath)
-include_directories(${DEP_FOLDER}/CPPMath)
-add_subdirectory(${DEP_FOLDER}/CPPUtils)
-include_directories(${DEP_FOLDER}/CPPUtils)
-#add_subdirectory(${DEP_FOLDER}/CPPJson)
-#include_directories(${DEP_FOLDER}/CPPJson)
+add_subdirectory(${DEP_FOLDER}/cppmath)
+include_directories(${DEP_FOLDER}/cppmath)
+add_subdirectory(${DEP_FOLDER}/cpputils)
+include_directories(${DEP_FOLDER}/cpputils)
+add_subdirectory(${DEP_FOLDER}/cppjson)
+include_directories(${DEP_FOLDER}/cppjson)
 
 target_link_libraries(${ENGINE} -static-libgcc -static-libstdc++)
-target_link_libraries(${ENGINE} Math Utils)
+target_link_libraries(${ENGINE} Math Utils Json)
 
 include_directories(engine)
 # include_directories(network)
