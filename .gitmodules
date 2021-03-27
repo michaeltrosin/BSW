@@ -7,3 +7,6 @@
 [submodule "dependencies/cppmath"]
 	path = dependencies/cppmath
 	url = https://github.com/michaeltrosin/CPPMath
+[submodule "Submod"]
+	url = https://github.com/michaeltrosin/CPPJson
+	branch = master
